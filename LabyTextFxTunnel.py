@@ -13,12 +13,14 @@ __author__ = 'Yoann'
 
 
 class LTFxTunnel(LabyTextFx.LabyTextFx):
-
-    ExchangeSet = set()  # Stocke les coordonnées des points d'entrée et de sortie des tunnels
-
-    def initFx(self, ObjLabyTxt, code):
     
+
+    def initFx(self, ObjLabyTxt, code):        
+        
         LabyTextFx.LabyTextFx.initFx(self,ObjLabyTxt, code)
+        
+        # Stocke les coordonnées des points d'entrée et de sortie des tunnels
+        self.ExchangeSet = set()  
         
         # Scan pour le caractère dans le labyrinthe
         

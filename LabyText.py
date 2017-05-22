@@ -15,12 +15,11 @@ import LabyTextFxPorteEt
 import LabyTextFxSensUnique
 
 class LabyText(LabyObjects.Laby):
-
-
-    CarteTxt = []          # Propriété contenant la carte du labyrinthe encours
+    
 
     def initMap(self):
     
+        # Propriété contenant la carte du labyrinthe encours
         self.CarteTxt = [
             "+-------+----------++-------+----------+",
             "T       |          ||       |          T",

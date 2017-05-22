@@ -10,21 +10,7 @@ class Laby():
     nécessaires à l'utilisation de la carte du Labyrinthe
     """
     
-    NomLaby = ''        # Nom du Labyrinthe
-    Theme = "Gray"      # Theme graphique du labyrinthe
-    LX = -1             # Largeur du Labyrinthe
-    LY = -1             # Hauteur du Labyrinthe
-    
-    Carte = None        # byte array du labyrinthe
-    CartePlayer = []    # Recense la position des joueurs (et monstres)
-    CarteFX = []        # Recense les effets dynamiques
-    
-    PlayerList = []     # Liste des joueurs
-    FXList = {}         # Liste des effets LabyTextFx
-    
 
-    # Propriétés d'état de la classe
-    __isValid = False
 
     def __init__(self,fileName=None):
         """
@@ -35,6 +21,24 @@ class Laby():
         :param fileName: Nom du fichier à charger
         :return: instance de Classe
         """
+
+
+        self.NomLaby = ''        # Nom du Labyrinthe
+        self.Theme = "Gray"      # Theme graphique du labyrinthe
+        self.LX = -1             # Largeur du Labyrinthe
+        self.LY = -1             # Hauteur du Labyrinthe
+        
+        self.Carte = None        # byte array du labyrinthe
+        self.CartePlayer = []    # Recense la position des joueurs (et monstres)
+        self.CarteFX = []        # Recense les effets dynamiques
+        
+        self.PlayerList = []     # Liste des joueurs
+        self.FXList = {}         # Liste des effets LabyTextFx
+        
+    
+        # Propriétés d'état de la classe
+        self.__isValid = False
+
         
         self.IsShadowEnabled = False
         

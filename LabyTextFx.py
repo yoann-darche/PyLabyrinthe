@@ -10,8 +10,7 @@ __author__ = 'Yoann'
 
 class LabyTextFx():
 
-    _Map = None   # Référence sur l'objet LabyText
-    _hasChanged = False # Indique si une mise à jour Gfx est nécessaire
+
 
     def initFx(self,ObjLabyTxt, code):
         """
@@ -22,7 +21,7 @@ class LabyTextFx():
         :param: code caractère utilisé dans le labyrinthe (ou list de code)
         
         """
-        
+        self._hasChanged = False # Indique si une mise à jour Gfx est nécessaire
         self._Map = ObjLabyTxt
         
         return None

@@ -14,7 +14,7 @@ __author__ = 'Yoann'
 # Vérification que nous sommes dans le programme principal
 if __name__ == "__main__":
 
-    print("Lancement du jeu de labyrinthe V1.04")
+    print("Lancement du jeu de labyrinthe V0.60")
 
     # Création du Labyrinthe
     print("1/ Création du Labyrinthe ....")
@@ -47,4 +47,9 @@ if __name__ == "__main__":
 
     # Lancement de la boucle principal (boucle graphique)
     LabyGfx.mainLoop()
+    
+    # Nettoyage
+    LabyGfx = None
+    MonLaby = None
+    
 

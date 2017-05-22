@@ -19,25 +19,25 @@ __author__ = 'Yoann'
 
 class CtxGfx():
 
-    # taille des cases du labyrinthe x/y en pixel
-    rx = 32
-    ry = 32
-    # Nb case
-    nx = 20
-    ny = 20
 
-    # Objets graphiques
-    fenetre = None
-    can = None
+    def __init__(self, title='Le labyrinthe oufff & Connceté! - V0.60'):
 
 
-    playerLKP = None        # Liste Déroulante pour les joueurs
-    selectedPlayer = None   # Variable contenant le joueur sélectioné
+        # taille des cases du labyrinthe x/y en pixel
+        self.rx = 32
+        self.ry = 32
+        # Nb case
+        self.nx = 20
+        self.ny = 20
+        
+        # Objets graphiques        
+        self.can = None
+        
+        # Objets Widget
+        self.playerLKP = None        # Liste Déroulante pour les joueurs
+        self.selectedPlayer = None   # Variable contenant le joueur sélectioné        
+        self.playerPV = None         # Zone text pour afficher les info d'un joueur
 
-    playerPV = None         # Zone text pour afficher les info d'un joueur
-
-
-    def __init__(self, title='Le labyrinthe oufff & Connceté! - V0.51'):
 
         self.fenetre = Tk.Tk()
         self.fenetre.title(title)
@@ -149,23 +149,23 @@ class GfxPlayer(Player):
 # ** Classe qui s'occupe de la génération graphique du Labyrinthe         **
 # **************************************************************************
 class GfxRender():
-    
-    photo_wall_list = []   # Liste des images de mur
-    photo_asset_list= []   # Liste des images d'objet
-    photo_shadow_list=[]   # Liste des ombres
-    photo_error = None     # Image Erreur
-
-    plateau     = None     # Pillow image pour traitement rapide
-    mapFx       = None
-    tkPlateau   = None     # Objet Image tk
-    tkPlateauId = None     # Id de l'objet tk
-    
 
     def __init__(self, laby):
         
          
         # Initialisation du callback de mise à jour des IA
         self._OnUpdateCbk = None
+        
+        # Initialisation des variables locales
+        self.photo_wall_list = []   # Liste des images de mur
+        self.photo_asset_list= []   # Liste des images d'objet
+        self.photo_shadow_list=[]   # Liste des ombres
+        self.photo_error = None     # Image Erreur
+
+        self.plateau     = None     # Pillow image pour traitement rapide
+        self.mapFx       = None
+        self.tkPlateau   = None     # Objet Image tk
+        self.tkPlateauId = None     # Id de l'objet tk        
 
         # Mémorisation de la référence sur l'objet de type Laby
         self._Map = laby
@@ -183,8 +183,7 @@ class GfxRender():
 
         # point référence temps
         self._lastTime  = time.time()
-
-
+        
 
     def _initGfx(self):
         
