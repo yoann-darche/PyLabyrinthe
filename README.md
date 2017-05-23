@@ -1,10 +1,9 @@
+# PyLabyrinthe
+A 2D Graphical Labyrinthe Game.
+
 <p align="center">
 	<img src="./doc/screenshoot/PyLabyrintheV060.png"/>
 </p>
-
-# PyLabyrinthe
-Graphical Labyrinthe Game.
-
 
 Use the Pillow Libarie and run in Python 3.X
 
