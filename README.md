@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://github.com/yoann-darche/PyLabyrinthe/doc/screenshoot/PyLabyrintheV060.png"/>
+	<img src="./doc/screenshoot/PyLabyrintheV060.png"/>
 </p>
 
 # PyLabyrinthe
