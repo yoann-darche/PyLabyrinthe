@@ -31,15 +31,15 @@ if __name__ == "__main__":
     # Positionnement du joueur
     #   Plus tard il sera nécessaire de faire une fonction pour générer une position
     #   aléatoire possible dans le labyrinthe
-    J1.x = 1
-    J1.y = 1
+    J1.setInitialPos(1,1)
+    J1.moveToInitialPos()
 
     # Ajout du second joueur
     J2 = LabyGfx.AddUser('Inconnu', spriteFile='sprite/Hero/hero2.png')
     # Affectation des touches
     J2.bindKey({"N": "z", "S": "s", "O": "q", "E": "d"})
-    J2.x = 1
-    J2.y = 18
+    J2.setInitialPos(1,18)
+    J2.moveToInitialPos()
 
     # Première génération de l'affichage du Labyrinthe
     LabyGfx.render(0)

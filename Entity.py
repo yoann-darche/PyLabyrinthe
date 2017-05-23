@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import random
+
 __author__ = 'Yoann'
 
 
@@ -26,6 +28,11 @@ class Entity():
         self.OnCheckMove = None
         self.OnUpdateLabPos = None
         self.OnDie = None
+                
+        
+    def setInitialPos(self,x,y):
+        self._initX = x
+        self._initY = y
 
 
     def move(self, direction):
@@ -69,6 +76,14 @@ class Entity():
         self.changePv(-1)
         self._hasChanged = True
         return True
+        
+    def moveToInitialPos(self):
+        """
+        Positionne l'entité sur la case de départ
+        """
+        
+        self.moveTo((self._initX,self._initY))
+
 
     def moveTo(self, coord):
         """
@@ -79,6 +94,7 @@ class Entity():
         """
         
         (self.x,self.y) = coord
+        self._hasChanged = True
             
         return True
         
@@ -101,7 +117,8 @@ class Entity():
             try:
                 self.OnDie()
             except:
-                pass
+                self.moveToInitialPos()
+                self.PV = 100
 
         return self.PV
         
@@ -124,10 +141,49 @@ class Player(Entity):
 class Monster(Entity):
     
     """
-    Cette classe correspond à la définition des Monstres
-    
-    Elle implemente les fonction spécicique au Monstre
+    Cette classe correspond à la définition des Monstres    
+    Elle implemente les fonctions spéciciques aux Monstres
     """
     
-    def doMove(self):
-        x = x
+    def __init__(self, speed = 1000, initpv = 100):
+        """
+        Constructeur du Monstre
+        :param speed : vitesse de déplacement du monstre en ms
+        :param initpv: nombre de point de vie du monstre
+        """
+        
+        # Appel de l'init de la classe parente (Entity)
+        Entity.__init__(self, initpv)
+        
+        self.speed = speed
+        self.lastDt = 0
+        
+        
+    
+    def doMove(self, dt):
+        
+        self.lastDt += dt
+        
+        # si le Delta time est supérieur à la vitesse alors on bouge
+        if(self.lastDt > self.speed):
+            self.lastDt = 0
+            
+            directions = ('N','S','E','O')
+            
+            hasMoved = False
+            
+            while(hasMoved == False):
+                a = random.choice(direction)
+                hasMoved = self.move(a)
+                
+                if hasMoved == False:
+                    direction.remove(a)
+                    if len(a) < O:
+                        self.moveToInitialPos()
+                        hasMoved = True
+                        
+                
+            
+            
+            
+            
