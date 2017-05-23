@@ -81,7 +81,6 @@ class Entity():
         """
         Positionne l'entité sur la case de départ
         """
-        
         self.moveTo((self._initX,self._initY))
 
 
@@ -92,8 +91,14 @@ class Entity():
         :param: coord un couple de deux valuer (x,y)
         :return: True / False
         """
-        
-        (self.x,self.y) = coord
+        x = self.x
+        y = self.y
+        (self.x,self.y)= coord
+        try: 
+            self.OnUpdateLabPos(self,x,y) 
+        except:
+            pass
+
         self._hasChanged = True
             
         return True

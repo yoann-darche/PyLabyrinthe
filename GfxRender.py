@@ -286,9 +286,9 @@ class GfxRender():
             for lx in range(0,self._ctxGfx.nx):
 
                 # Est ce un Mur ?
-                code = self._Map.Carte[ly * self._Map.LX + lx]
+                code = self._Map.Carte[ly * self._Map.LX + lx] & 0x0F
                 
-                #print("render::code = ", code)
+                #print("render::code (lx,ly) = (",lx, ",", ly, ")", code)
                 if code != 0:
                     self.plateau.paste(self.photo_wall_list[code],(lx*self._ctxGfx.ry, ly*self._ctxGfx.ry))                
                             
