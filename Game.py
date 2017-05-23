@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import GfxRender as Gfx
-#import LabyText as Laby
 import CustomLaby as Laby
 
 __author__ = 'Yoann'

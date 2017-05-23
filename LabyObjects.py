@@ -1,6 +1,6 @@
 __author__ = 'Yoann'
 
-import Player
+import Entity
 import LabyTextFx
 
 class Laby():
@@ -29,7 +29,7 @@ class Laby():
         self.LY = -1             # Hauteur du Labyrinthe
         
         self.Carte = None        # byte array du labyrinthe
-        self.CartePlayer = []    # Recense la position des joueurs (et monstres)
+        self.CarteEntity = []    # Recense la position des joueurs (et monstres)
         self.CarteFX = []        # Recense les effets dynamiques
         
         self.PlayerList = []     # Liste des joueurs
@@ -77,7 +77,7 @@ class Laby():
         self.LX = mLX
         self.LY = mLY
         self.CarteFX = [[None] * self.LX for _ in range(self.LY)]
-        self.CartePlayer = [[0] * self.LX for _ in range(self.LY)]
+        self.CarteEntity = [[None] * self.LX for _ in range(self.LY)]
         self.Carte = bytearray(self.LX *self.LY)
                 
                 
@@ -88,11 +88,11 @@ class Laby():
     def addPlayer(self, PlayerObj):
         """
         Cette fonction ajoute un joueur dans le labyrinthe
-        :param PlayerObj objet représentant un joueur descendant de Player.py
+        :param PlayerObj objet représentant un joueur descendant de Entity.py
         :return True/False
         """
         # Vérification que l'objet est bien un descendant de Player
-        if not(isinstance(PlayerObj,Player.Player)):
+        if not(isinstance(PlayerObj,Entity.Player)):
             return False
             
         # Vérification que le joueur n'est pas déjà enregistrer
@@ -102,13 +102,14 @@ class Laby():
         # Ajout du joueur dans la liste
         self.PlayerList.append(PlayerObj)
         
+        
         # Lien avec la fonction de contrôle de déplacement
         PlayerObj.OnCheckMove = self.checkPos
         PlayerObj.OnUpdateLabPos = self.updatePlayerPos
         
         # ajout de sa position dans la carte
         if PlayerObj.x < self.LX and PlayerObj.x >= 0 and PlayerObj.y < self.LY and PlayerObj.y >= 0 :
-            self.CartePlayer[PlauerObj.y][PlayerObj.x] = 1
+            self.CarteEntity[PlauerObj.y][PlayerObj.x] = PlayerObj
         
         
         return True
@@ -116,14 +117,14 @@ class Laby():
     def removePlayer(self, PlauerObj):
         """
         Cette fonction supprime un joueur du labyrinthe
-        :param PlayerObj objet représentant un joueur descendant de Player.py
+        :param PlayerObj objet représentant un joueur descendant de Entity.py
         :return True/False
         """ 
         
         # Vérification que le joueur n'est pas déjà enregistrer
         if PlayerObj in self.PlayerList:
             # Efface la position dans la carte
-            self.CartePlayer[PlauerObj.y][PlayerObj.x] = 0
+            self.CarteEntity[PlauerObj.y][PlayerObj.x] = None
             # retire de la liste
             self.PlayerList.remove(PlayerObj)
             return True
@@ -131,7 +132,7 @@ class Laby():
         return False
 
 
-    def checkPos(self,x,y,Player=None):
+    def checkPos(self,x,y,PlayerObj=None):
         """
         Fonction qui vérifie que la position x, y est libre pour un déplacement
         :param x:
@@ -146,7 +147,7 @@ class Laby():
         #print("checkPos(",x,",",y,") [", self.Carte[y*self.LX + x] & 0x0F,"]" )    
             
         # Vérifie qu'il n'y a pas un autre joueur/monstre
-        if self.CartePlayer[y][x] != 0 :
+        if self.CarteEntity[y][x] is not None :
             return False
             
         #print("checkPos:Pas de joueur",x,y, self.Carte[y*self.LX + x] )
@@ -158,12 +159,12 @@ class Laby():
         #print("checkPos:Pas vide",x,y, self.Carte[y*self.LX + x] )
             
         # Est un effet
-        if (Player is not None):
+        if (PlayerObj is not None):
             
             #print("OK for FX Test")
             
             if self.CarteFX[y][x] is not None:
-                return self.CarteFX[y][x](Player,'check',x,y)              
+                return self.CarteFX[y][x](PlayerObj,'check',x,y)              
                     
         # Dans le cas par défaut on retourne True
         return True
@@ -183,19 +184,19 @@ class Laby():
             (nx,ny) = self.CarteFX[ObjPlayer.y][ObjPlayer.x](ObjPlayer,'apply') 
             if nx is not None:
                 
-                self.CartePlayer[prev_y][prev_x] = 0
+                self.CarteEntity[prev_y][prev_x] = None
                 
                 print("LabyObject::updatePlayerPos :: OK for FX Apply nouvelle pos : ",nx,ny)
                 ObjPlayer.moveTo((nx,ny))
                 
-                self.CartePlayer[ObjPlayer.y][ObjPlayer.x] = 1
+                self.CarteEntity[ObjPlayer.y][ObjPlayer.x] = ObjPlayer
             else:
-                self.CartePlayer[prev_y][prev_x] = 0
-                self.CartePlayer[ObjPlayer.y][ObjPlayer.x] = 1
+                self.CarteEntity[prev_y][prev_x] = None
+                self.CarteEntity[ObjPlayer.y][ObjPlayer.x] = ObjPlayer
                 
         else:
-            self.CartePlayer[prev_y][prev_x] = 0
-            self.CartePlayer[ObjPlayer.y][ObjPlayer.x] = 1
+            self.CarteEntity[prev_y][prev_x] = None
+            self.CarteEntity[ObjPlayer.y][ObjPlayer.x] = ObjPlayer
                 
 
          

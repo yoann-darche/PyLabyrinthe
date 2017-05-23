@@ -7,7 +7,7 @@ import os
 
 import time
 
-from Player import Player
+from Entity import Player
 
 
 __author__ = 'Yoann'
