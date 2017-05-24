@@ -19,6 +19,7 @@ Linux Installation:
 * To lunch the game run : game.py
 * To customize the Labyrinthe, edit the CustomLaby.py
 * To customize the effect list, edit the LabyText.py
+* To customize the Monster move strategy, edit the MonsterEngine.py
 
 # State
 In progress
