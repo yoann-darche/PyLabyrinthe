@@ -44,16 +44,18 @@ class LTFxTunnel(LabyTextFx.LabyTextFx):
     def checkFX(self, ObjPlayer, type, x=None, y=None):
     
         if type=='check': return True
+        if type!='apply': return False
         
         # test du cas où il n'y a qu'une position
         l = len(self.ExchangeSet)
         if l < 2:
             return True
             
-        print("LTFXTunnel::applyFX :: ", self.ExchangeSet)
+        print("LTFXTunnel::applyFX :: ExchangeSet ", self.ExchangeSet)
+        print("LTFXTunnel::applyFX :: ObjPlayer::Pos ", (ObjPlayer.x, ObjPlayer.y))
         # retire de la liste la position actuelle
         TmpLst = list(self.ExchangeSet - {(ObjPlayer.x, ObjPlayer.y)})
-        print("LTFXTunnel::applyFX :: ", TmpLst, "//", self.ExchangeSet)
+        print("LTFXTunnel::applyFX :: TmpList ", TmpLst, "//", self.ExchangeSet)
                 
         return(random.choice(TmpLst))
         

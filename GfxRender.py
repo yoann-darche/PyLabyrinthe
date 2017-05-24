@@ -463,7 +463,6 @@ class GfxRender():
             
         # Pour chaque monstre
         for p in self._Map.MonsterList:
-            p.doMove(dt)
             p.render(dt)
         
 
@@ -478,17 +477,17 @@ class GfxRender():
         # Calcule la différence
         dt = cur - self._lastTime
 
-        # Pour chaque perso
-        # for p in self._Map.PlayerList:
-        #    p.render(dt)
+        # Mise à jour des positions des monstres
+        self._Map.updateMonster(dt)
         
-        self.render(dt)
-
         # Appel du callback pour MAj de l'IA...
         try:
             self._OnUpdateCbk(dt)
         except:
             pass
+        
+        self.render(dt)
+
 
         # Mise à jour de la référence temporelle
         self._lastTime  = cur

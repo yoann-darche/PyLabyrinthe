@@ -48,7 +48,7 @@ class Entity():
         
         self.lastDir = direction
 
-       # print("Movement détecté sur le joueur {0} en position {1},{2} dir={3}".format(self.Name, self.x, self.y, direction))
+        #print("Movement détecté sur le joueur {0} en position {1},{2} dir={3}".format(self.Name, self.x, self.y, direction))
         #try:
         if direction == 'N' and self.OnCheckMove(self.x, self.y-1, self):
             self.y -= 1
@@ -82,12 +82,27 @@ class Entity():
         """
         Positionne l'entité sur la case de départ
         """
-        self.moveTo((self._initX,self._initY))
+        self.moveToInternal((self._initX,self._initY))
 
 
     def moveTo(self, coord):
         """
         Cette fonction déplace le jour en coordonnées absolues
+        /!\ En appel externe !!
+        
+        :param: coord un couple de deux valuer (x,y)
+        :return: True / False
+        """
+
+        (self.x,self.y)= coord
+        self._hasChanged = True
+                    
+        return True
+        
+    def moveToInternal(self, coord):
+        """
+        Cette fonction déplace le jour en coordonnées absolues
+        /!\ En appel interne !!
         
         :param: coord un couple de deux valuer (x,y)
         :return: True / False
@@ -95,6 +110,9 @@ class Entity():
         x = self.x
         y = self.y
         (self.x,self.y)= coord
+        
+        print("Entity::moveToInternal old({0},{1}) new({2},{3})".format(x,y,self.x,self.y))
+        
         try: 
             self.OnUpdateLabPos(self,x,y) 
         except:

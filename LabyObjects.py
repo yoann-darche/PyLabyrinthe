@@ -185,6 +185,15 @@ class Laby():
         return False
         
     # **************************************************************************
+    # ** Gestion des mouvements des monstres                                  **
+    # ************************************************************************** 
+    
+    def updateMonster(self,dt):
+        # Pour chaque monstre
+        for p in self.MonsterList:
+            p.doMove(dt)
+        
+    # **************************************************************************
     # ** Gestion des Déplacements                                             **
     # ************************************************************************** 
     
@@ -407,7 +416,9 @@ class Laby():
             return True
             
         return False
-                               
+       
+
+        
 
     @property
     def isValide(self):
