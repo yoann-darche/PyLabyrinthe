@@ -15,6 +15,8 @@ Linux Installation:
 * apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk
 * pip3 install --upgrade Pillow
 
+WebSite of Pillow : https://python-pillow.org/
+
 ## Description
 * To lunch the game run : game.py
 * To customize the Labyrinthe, edit the CustomLaby.py
