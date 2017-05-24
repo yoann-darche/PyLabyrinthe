@@ -7,7 +7,7 @@ import os
 
 import time
 
-from Entity import Player
+from Entity import Player, Monster
 
 
 __author__ = 'Yoann'
@@ -103,7 +103,7 @@ class GfxPlayer(Player):
 
     def __str__(self):
         """ Methode appelée lorsque que l'on utilise la fonction print() """
-        return "[{0} PV:{1}]".format(self.Name, self.PV)
+        return "P[{0} PV:{1}]".format(self.Name, self.PV)
 
     def bindKey(self, listKey):
         """
@@ -143,6 +143,66 @@ class GfxPlayer(Player):
 
         return None
 
+# *****************************************************************************
+# ** Classe dérivant du Monster pour introduire les spécificités de          **
+# ** l'affichage en mode graphique.                                          **
+# *****************************************************************************
+
+class GfxMonster(Monster):
+
+    """
+       Cette classe dérive de la classe Player afin de définir
+       les methode et propriété pour l'affichage d'un joueur
+       en mode graphique
+    """
+
+    def __init__(self, ctxGfx, speed=1000, initPv=100, spriteFile='sprite/Hero/monster.png'):
+        """
+        Fonction d'initialisation du Player mode Graphique
+        :param gfxCtx: Context TK
+        :param initPv: Point de vie Initial
+        :param spriteFile: Fichier image représantant le joueur
+        :return: NA
+        """
+
+        # Référence sur context graphique
+        self._ctxGfx = ctxGfx
+
+        Monster.__init__(self,speed,initPv)
+
+        # Contient le sprite du joueur
+        self.Sprite = Tk.PhotoImage(file=spriteFile, master=self._ctxGfx.fenetre)
+        self._img = None
+
+        # Déclanche l'affichage
+        self._hasChanged = True
+
+    def __str__(self):
+        """ Methode appelée lorsque que l'on utilise la fonction print() """
+        return "M[{0} PV:{1}]".format(self.Name, self.PV)
+
+
+    def render(self, t):
+        """
+        Fonction assurant l'affichage du player
+        :param t:
+        :return:
+        """
+
+        if not self._hasChanged:
+            return None
+
+        if self._img is None:
+            self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
+                                                      image=self.Sprite, tag='sprite')
+        else:
+            self._ctxGfx.can.coords(self._img, self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry)
+            self._ctxGfx.can.tag_raise(self._img) 
+            
+
+        self._hasChanged = False
+
+        return None
 
 
 # **************************************************************************
@@ -247,6 +307,33 @@ class GfxRender():
             return p
         except e:
             return None
+            
+            
+    def AddMonster(self, monsterName, speed=2, pv=5000, spriteFile='sprite/Hero/monster.png'):
+        """
+            Créer et Ajoute un monstre dans le labyrinthe
+        :param 
+        :return: None
+        """
+
+        if self._ctxGfx is None:
+            print("GfxRender::AddMonster : Pas de context graphique initialisé !")
+            return None
+
+        try:
+            # Création du nouveau joueur (et de son contexte graphique)
+            p = GfxMonster(self._ctxGfx, speed, initPv=pv, spriteFile=spriteFile)
+            p.Name = monsterName
+            
+            # Ajout dans la liste des joueurs
+            self._Map.addMonster(p)
+            
+            return p
+        except e:
+            return None
+
+
+
 
     def renderMap(self):
         """
@@ -372,6 +459,11 @@ class GfxRender():
 
         # Pour chaque perso
         for p in self._Map.PlayerList:
+            p.render(dt)
+            
+        # Pour chaque monstre
+        for p in self._Map.MonsterList:
+            p.doMove(dt)
             p.render(dt)
         
 

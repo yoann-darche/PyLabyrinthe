@@ -2,6 +2,7 @@
 
 import GfxRender as Gfx
 import CustomLaby as Laby
+import MonsterEngine
 
 __author__ = 'Yoann'
 
@@ -40,6 +41,26 @@ if __name__ == "__main__":
     J2.bindKey({"N": "z", "S": "s", "O": "q", "E": "d"})
     J2.setInitialPos(1,18)
     J2.moveToInitialPos()
+    
+    # Ajout d'un monstre
+    M1 = LabyGfx.AddMonster('AHRRR', speed=0.5)
+    M1.engine = MonsterEngine.MME_Basic
+    M1.setInitialPos(38,1)
+    M1.moveToInitialPos()
+    
+    # Ajout d'un monstre
+    M2 = LabyGfx.AddMonster('AHRRR2', speed=0.5, spriteFile="sprite/Hero/monster02.png")
+    M2.engine = MonsterEngine.MME_Standard
+    M2.setInitialPos(15,17)
+    M2.moveToInitialPos()
+    
+    # Ajout d'un monstre
+    M3 = LabyGfx.AddMonster('AHRRR3', speed=0.2, spriteFile="sprite/Hero/monster03.png")
+    M3.engine = MonsterEngine.MME_Foward
+    M3.setInitialPos(15,15)
+    M3.moveToInitialPos()
+    
+
 
     # Première génération de l'affichage du Labyrinthe
     LabyGfx.render(0)
@@ -48,7 +69,7 @@ if __name__ == "__main__":
     LabyGfx.mainLoop()
     
     # Nettoyage
-    LabyGfx = None
-    MonLaby = None
+    #LabyGfx = None
+    #MonLaby = None
     
 

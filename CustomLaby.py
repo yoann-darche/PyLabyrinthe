@@ -40,5 +40,5 @@ class LabyCustom(LabyText.LabyText):
             "+----+--------------+---+--------------+"]
     
         self.Theme = "Blue"
-        self.IsShadowEnabled = False
+        self.IsShadowEnabled = True
         

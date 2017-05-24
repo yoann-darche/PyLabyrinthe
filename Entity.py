@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import random
+import MonsterEngine
 
 __author__ = 'Yoann'
 
@@ -150,7 +151,7 @@ class Monster(Entity):
     Elle implemente les fonctions spéciciques aux Monstres
     """
     
-    def __init__(self, speed = 1000, initpv = 100):
+    def __init__(self, speed = 1, initpv = 100):
         """
         Constructeur du Monstre
         :param speed : vitesse de déplacement du monstre en ms
@@ -160,12 +161,19 @@ class Monster(Entity):
         # Appel de l'init de la classe parente (Entity)
         Entity.__init__(self, initpv)
         
+        self.OnAvlDir = None # Recherche les direction possible
+        
         self.speed = speed
         self.lastDt = 0
+        
+        self.engine = MonsterEngine.MME_Standard
         
         
     
     def doMove(self, dt):
+        """
+        Cette fonction assure le déplacement du monster
+        """
         
         self.lastDt += dt
         
@@ -173,22 +181,6 @@ class Monster(Entity):
         if(self.lastDt > self.speed):
             self.lastDt = 0
             
-            directions = ('N','S','E','O')
-            
-            hasMoved = False
-            
-            while(hasMoved == False):
-                a = random.choice(direction)
-                hasMoved = self.move(a)
-                
-                if hasMoved == False:
-                    direction.remove(a)
-                    if len(a) < O:
-                        self.moveToInitialPos()
-                        hasMoved = True
+            self.engine(self,dt)
                         
-                
-            
-            
-            
-            
+

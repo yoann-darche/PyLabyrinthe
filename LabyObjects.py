@@ -33,6 +33,7 @@ class Laby():
         self.CarteFX = []        # Recense les effets dynamiques
         
         self.PlayerList = []     # Liste des joueurs
+        self.MonsterList = []    # Liste des monstres
         self.FXList = {}         # Liste des effets LabyTextFx
         
     
@@ -132,6 +133,95 @@ class Laby():
         return False
 
 
+    # **************************************************************************
+    # ** Gestion des Monstres                                                 **
+    # **************************************************************************   
+
+    def addMonster(self, MonsterObj):
+        """
+        Cette fonction ajoute un monstre dans le labyrinthe
+        :param MonsterObj objet représentant un monstre descendant de Entity.py
+        :return True/False
+        """
+        # Vérification que l'objet est bien un descendant de Monster
+        if not(isinstance(MonsterObj,Entity.Monster)):
+            return False
+            
+        # Vérification que le monstre n'est pas déjà enregistré
+        if MonsterObj in self.MonsterList:
+            return False
+            
+        # Ajout du monstre dans la liste
+        self.MonsterList.append(MonsterObj)
+        
+        
+        # Lien avec la fonction de contrôle de déplacement
+        MonsterObj.OnCheckMove = self.checkPos
+        MonsterObj.OnUpdateLabPos = self.updatePlayerPos
+        MonsterObj.OnAvlDir = self.getAvlDir
+        
+        # ajout de sa position dans la carte
+        if MonsterObj.x < self.LX and MonsterObj.x >= 0 and MonsterObj.y < self.LY and MonsterObj.y >= 0 :
+            self.CarteEntity[MonsterObj.y][MonsterObj.x] = MonsterObj
+        
+        
+        return True
+
+    def removeMonster(self, MonsterObj):
+        """
+        Cette fonction supprime un monstre du labyrinthe
+        :param MonsterObj objet représentant un monster descendant de Entity.py
+        :return True/False
+        """ 
+        
+        # Vérification que le monstre est bien enregistré
+        if MonsterObj in self.MonsterList:
+            # Efface la position dans la carte
+            self.CarteEntity[MonsterObj.y][MonsterObj.x] = None
+            # retire de la liste
+            self.MonsterList.remove(MonsterObj)
+            return True
+            
+        return False
+        
+    # **************************************************************************
+    # ** Gestion des Déplacements                                             **
+    # ************************************************************************** 
+    
+    def getAvlDir(self,x,y):
+        """
+            Retourne les directions possibles à partir d'une position            
+        """ 
+        
+        # Vérifie que nous sommes bien dans les limites
+        if not(self.__isValid) and not(x < self.LX and x >= 0 and y < self.LY and y >= 0) :
+            return []
+    
+        # Vérifie qu'il n'y a pas de mur
+        if (self.Carte[y*self.LX + x] & 0x0F) != 0 :
+            return []
+            
+        Res = []
+        
+        if x > 0:
+            if (self.Carte[y*self.LX + x-1] & 0x0F) == 0 :
+                Res = Res + [ 'O' ]
+                
+        if y > 0:
+            if (self.Carte[(y-1)*self.LX + x] & 0x0F) == 0 :
+                Res = Res + [ 'N' ]
+                
+        if x < self.LX-1:
+            if (self.Carte[y*self.LX + x+1] & 0x0F) == 0 :
+                Res = Res + [ 'E' ]
+                
+        if y < self.LY-1:
+            if (self.Carte[(y+1)*self.LX + x] & 0x0F) == 0 :
+                Res = Res + [ 'S' ]
+                
+        return(Res)
+    
+
     def checkPos(self,x,y,PlayerObj=None):
         """
         Fonction qui vérifie que la position x, y est libre pour un déplacement
@@ -208,7 +298,13 @@ class Laby():
         
         
     def updateLight(self, x,y):
-               
+        
+        """
+        Cette fonction assure le calcul de l'éclairage du labyrinthe
+        A chaque fois qu'un joueur se déplace, alors la case où se 
+        trouve le joueur est éclairée ansi qu'une partie des cases
+        à proximitées
+        """
         
         if x < self.LX-1:
             max_x=x+1
