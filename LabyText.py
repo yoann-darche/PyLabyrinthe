@@ -10,6 +10,7 @@ __author__ = 'Yoann'
 """
 
 import LabyTextFxTunnel
+import LabyTextFxAspirateur
 import LabyTextFxPorte
 import LabyTextFxPorteEt
 import LabyTextFxSensUnique
@@ -93,6 +94,7 @@ class LabyText(LabyObjects.Laby):
         # Ajout des effets
 
         self._registerFx(LabyTextFxTunnel.LTFxTunnel(),'T')
+        self._registerFx(LabyTextFxAspirateur.LTFxAspirateur(),'A')
                 
         self._registerFx(LabyTextFxPorte.LTFxPorte(),'P')
         self._registerFx(LabyTextFxPorte.LTFxPorte(8),'Q')

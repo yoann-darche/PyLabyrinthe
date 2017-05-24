@@ -18,7 +18,7 @@ class LabyCustom(LabyText.LabyText):
     
         self.CarteTxt = [
             "+------+-----------+--------+----------+",
-            "T      |q          |        |          T",
+            "T      |q          |        | A        T",
             "+----+ | --_----+  | +---+  |  ------+ |",
             "|    |    >p>   |  | |   |           | |",
             "| +  +--P--_--+ |  + + + +-R-+^----+ | |",
@@ -31,7 +31,7 @@ class LabyCustom(LabyText.LabyText):
             "|  |   |  |   +---+ + |T++ |s    >   +-+",
             "|  |   ++ |       | +-+-+  +-+---+ +-+T|",
             "|  +-+  + +-----+ | |   | ++   Su+   | |",
-            "T       |       | | < | | |  +---+---+^|",
+            "T       |A      | | < | | |  +---+---+^|",
             "|    +--+-+     | | +-+ |   ++      s| |",
             "|    |       1  + + | | +++ +  +-----+ |",
             "| +--+ +------+     | |   |         u| |",
@@ -40,5 +40,5 @@ class LabyCustom(LabyText.LabyText):
             "+----+--------------+---+--------------+"]
     
         self.Theme = "Blue"
-        self.IsShadowEnabled = True
+        self.IsShadowEnabled = False
         

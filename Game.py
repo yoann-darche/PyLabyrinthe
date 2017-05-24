@@ -43,24 +43,25 @@ if __name__ == "__main__":
     J2.moveToInitialPos()
     
     # Ajout d'un monstre
-    M1 = LabyGfx.AddMonster('AHRRR', speed=0.5)
-    M1.engine = MonsterEngine.MME_Basic
-    M1.setInitialPos(38,1)
-    M1.moveToInitialPos()
+    M = LabyGfx.AddMonster('AHRRR', speed=0.5)
+    M.engine = MonsterEngine.MME_Basic
+    M.setInitialPos(38,1)
+    M.moveToInitialPos()
     
     # Ajout d'un monstre
-    M2 = LabyGfx.AddMonster('AHRRR2', speed=0.5, spriteFile="sprite/Hero/monster02.png")
-    M2.engine = MonsterEngine.MME_Standard
-    M2.setInitialPos(15,17)
-    M2.moveToInitialPos()
+    M = LabyGfx.AddMonster('AHRRR2', speed=0.5, spriteFile="sprite/Hero/monster02.png")
+    M.engine = MonsterEngine.MME_Standard
+    M.setInitialPos(15,17)
+    M.moveToInitialPos()
     
     # Ajout d'un monstre
-    M3 = LabyGfx.AddMonster('AHRRR3', speed=0.2, spriteFile="sprite/Hero/monster03.png")
-    M3.engine = MonsterEngine.MME_Foward
-    M3.setInitialPos(15,15)
-    M3.moveToInitialPos()
+    M = LabyGfx.AddMonster('AHRRR3', speed=0.2, spriteFile="sprite/Hero/monster03.png")
+    M.engine = MonsterEngine.MME_Foward
+    M.setInitialPos(15,15)
+    M.moveToInitialPos()
     
-
+    M = None
+    
 
     # Première génération de l'affichage du Labyrinthe
     LabyGfx.render(0)

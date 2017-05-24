@@ -176,6 +176,7 @@ class GfxMonster(Monster):
 
         # Déclanche l'affichage
         self._hasChanged = True
+        
 
     def __str__(self):
         """ Methode appelée lorsque que l'on utilise la fonction print() """
@@ -203,7 +204,18 @@ class GfxMonster(Monster):
         self._hasChanged = False
 
         return None
-
+        
+    def kill(self):
+        
+        #print("GfxMonster::kill:tagList:",self._ctxGfx.can.find_all())
+        if self._img is not None:
+            self._ctxGfx.can.delete(self._img)
+            self._img = None
+        
+        self._ctxGfx.can.delete(self.Sprite)
+        self.Sprite = None
+        
+        #print("GfxMonster::kill:tagList AFTER:",self._ctxGfx.can.find_all())
 
 # **************************************************************************
 # ** Classe qui s'occupe de la génération graphique du Labyrinthe         **

@@ -285,10 +285,12 @@ class Laby():
                 
                 self.CarteEntity[prev_y][prev_x] = None
                 
-                print("LabyObject::updatePlayerPos :: OK for FX Apply nouvelle pos : ",nx,ny)
-                ObjPlayer.moveTo((nx,ny))
+                if nx >= 0:            
                 
-                self.CarteEntity[ObjPlayer.y][ObjPlayer.x] = ObjPlayer
+                    print("LabyObject::updatePlayerPos :: OK for FX Apply nouvelle pos : ",nx,ny)
+                    ObjPlayer.moveTo((nx,ny))               
+                    self.CarteEntity[ObjPlayer.y][ObjPlayer.x] = ObjPlayer
+
             else:
                 self.CarteEntity[prev_y][prev_x] = None
                 self.CarteEntity[ObjPlayer.y][ObjPlayer.x] = ObjPlayer
