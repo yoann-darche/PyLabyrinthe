@@ -16,6 +16,7 @@ Linux Installation:
 * pip3 install --upgrade Pillow
 
 WebSite of Pillow : https://python-pillow.org/
+GitHub : https://github.com/python-pillow/Pillow
 
 ## Description
 * To lunch the game run : game.py
