@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import GfxRender as Gfx
-import CustomLaby as Laby
+import LabyText as Laby
 import MonsterEngine
 
 __author__ = 'Yoann'
@@ -19,45 +19,48 @@ if __name__ == "__main__":
     # Création du Labyrinthe
     print("1/ Création du Labyrinthe ....")
     #MonLaby = Laby.LabyText()
-    MonLaby = Laby.LabyCustom()
+    MonLaby = Laby.LabyText()
+    MonLaby.loadJSON('./maps/Intro_001.json')
+    #MonLaby.setDefault()
+    
     
     # Création du context Graphique
     print("2/ Création de l'environnement Graphique")
     LabyGfx = Gfx.GfxRender(MonLaby)
 
     # Ajout du premier joueur
-    J1 = LabyGfx.AddUser('Yoann')
+    J1 = LabyGfx.AddUser('Yoann', pv=500)
     # Affectation des touches
     J1.bindKey({"N": "<Up>", "S": "<Down>", "O": "<Left>", "E": "<Right>"})
     # Positionnement du joueur
     #   Plus tard il sera nécessaire de faire une fonction pour générer une position
     #   aléatoire possible dans le labyrinthe
-    J1.setInitialPos(1,1)
+    #J1.setInitialPos(1,1)
     J1.moveToInitialPos()
 
     # Ajout du second joueur
-    J2 = LabyGfx.AddUser('Inconnu', spriteFile='sprite/Hero/hero2.png')
+    J2 = LabyGfx.AddUser('Inconnu', spriteFile='sprite/Hero/hero2.png', pv=500)
     # Affectation des touches
     J2.bindKey({"N": "z", "S": "s", "O": "q", "E": "d"})
-    J2.setInitialPos(1,18)
+    #J2.setInitialPos(1,18)
     J2.moveToInitialPos()
     
     # Ajout d'un monstre
-    M = LabyGfx.AddMonster('AHRRR', speed=0.5)
+    M = LabyGfx.AddMonster('AHRRR', speed=0.5, pv=500)
     M.engine = MonsterEngine.MME_Basic
-    M.setInitialPos(38,1)
+    #M.setInitialPos(38,1)
     M.moveToInitialPos()
     
     # Ajout d'un monstre
-    M = LabyGfx.AddMonster('AHRRR2', speed=0.5, spriteFile="sprite/Hero/monster02.png")
+    M = LabyGfx.AddMonster('AHRRR2', speed=0.3, spriteFile="sprite/Hero/monster02.png", pv=500)
     M.engine = MonsterEngine.MME_Standard
-    M.setInitialPos(15,17)
+    #M.setInitialPos(15,17)
     M.moveToInitialPos()
     
     # Ajout d'un monstre
-    M = LabyGfx.AddMonster('AHRRR3', speed=0.2, spriteFile="sprite/Hero/monster03.png")
+    M = LabyGfx.AddMonster('AHRRR3', speed=0.2, spriteFile="sprite/Hero/monster03.png", pv=1000)
     M.engine = MonsterEngine.MME_Foward
-    M.setInitialPos(15,15)
+    #M.setInitialPos(15,15)
     M.moveToInitialPos()
     
     M = None

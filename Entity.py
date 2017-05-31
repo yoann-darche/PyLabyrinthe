@@ -20,8 +20,9 @@ class Entity():
         self.y = -1
         self.lastDir = None
         self.allowedDir = ('N', 'S', 'E', 'O')
-
-        self.PV = initpv
+        
+        self._InitPV = initpv
+        self.PV = self._InitPV
 
         self._hasChanged = False
 
@@ -30,8 +31,21 @@ class Entity():
         self.OnUpdateLabPos = None
         self.OnDie = None
                 
+                
+    def restart(self):
+        """
+        Cette fonction est appelée pour réinitialiser la position de l'entité
+        """
+        self.x = self._initX
+        self.y = self._initY
+        self.PV = self._InitPV
+        self.lastDir = None
+        self.allowedDir = ('N', 'S', 'E', 'O')
         
     def setInitialPos(self,x,y):
+        """
+        Définit la position initiale de l'netité
+        """
         self._initX = x
         self._initY = y
 
@@ -142,7 +156,7 @@ class Entity():
                 self.OnDie()
             except:
                 self.moveToInitialPos()
-                self.PV = 100
+                self.PV = self._InitPV
 
         return self.PV
         
@@ -158,7 +172,7 @@ class Player(Entity):
     """
     Cette classe correspond à la définition des Joueurs
     
-    Elle implemente les fonction spécicique au joueurs
+    Elle implemente les fonctions spéciciques aux joueurs
     """
     
     

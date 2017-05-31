@@ -1,0 +1,67 @@
+{
+    "NomLaby"           : "Intro 0001",
+    "Theme"             : "Blue",    
+    "IsShadowEnabled"   : false,
+    "PlayerSponeCode"   : "@",
+    "MonsterSponeCode"  : "#",
+    "Carte"   : [
+            "+------+-----------+--------+----------+",
+            "|   @  |                               |",
+            "|      +--+                            |",
+            "+-+_+--+ r|                            |",
+            "| | +--+- +                            |",
+            "| |p|s    |                            |",
+            "+-+P+--+  |                            |",
+            "|      |  |-------+                    |",
+            "+--+   + ++     < |                    |",
+            "|r     | |+-----+ |                    |",
+            "+--+   | ++     |A|                    |",
+            "|  |   |  +-+   | |                    |",
+            "|  |   |    |   |^|                    |",
+            "|  +R--+  +S+----Q----+                |",
+            "T      >  | |         |---+            |",
+            "|    +-+  | |           q |            |",
+            "|    |    <q|         |---+            |",
+            "|    +--_---|         |                |",
+            "|    |      |    #    |                |",
+            "|  s R      |         |                |",
+            "+----+------+------- -+----------------+"
+    ],
+    "FXList"    : [
+        { "MapCode"     : "T", 
+          "FXHandler"   : "LabyTextFxTunnel.LTFxTunnel"},
+        
+        { "MapCode"     : "A", 
+          "FXHandler"   : "LabyTextFxAspirateur.LTFxAspirateur"},
+          
+        { "MapCode"     : "^", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "N" } },
+        { "MapCode"     : "_", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "S" } },
+        { "MapCode"     : "<", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "O" } },
+        { "MapCode"     : ">", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "E" } },
+
+          
+        { "MapCode"     : "P", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte"},
+
+        { "MapCode"     : "Q", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 5} },
+          
+        { "MapCode"     : "R", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 4} },
+        
+        { "MapCode"     : "S", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt"}
+   
+        ]
+ 
+}

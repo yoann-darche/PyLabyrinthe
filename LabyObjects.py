@@ -1,5 +1,7 @@
 __author__ = 'Yoann'
 
+import random
+
 import Entity
 import LabyTextFx
 
@@ -12,12 +14,10 @@ class Laby():
     
 
 
-    def __init__(self,fileName=None):
+    def __init__(self):
         """
         Constructeur de Classe: Cette fonction lance l'initialisation de l'objet.
-        Si un nom de fichier est préciser alors il sera chargé, sinon la fonction
-        de construction par défaut sera appélée.
-
+        
         :param fileName: Nom du fichier à charger
         :return: instance de Classe
         """
@@ -32,6 +32,11 @@ class Laby():
         self.CarteEntity = []    # Recense la position des joueurs (et monstres)
         self.CarteFX = []        # Recense les effets dynamiques
         
+        self.IsShadowEnabled = False # Desactivation de la fonction calcul d'ombre
+        
+        self.PlayerSponePlace = set()  # Ensemble des positions d'apparition
+        self.MonsterSponePlace = set()  # Ensemble des positions d'apparition
+                
         self.PlayerList = []     # Liste des joueurs
         self.MonsterList = []    # Liste des monstres
         self.FXList = {}         # Liste des effets LabyTextFx
@@ -39,19 +44,7 @@ class Laby():
     
         # Propriétés d'état de la classe
         self.__isValid = False
-
-        
-        self.IsShadowEnabled = False
-        
-        if fileName == None:
-            self.initMap()
-            self.setDefault()
-        else:
-            try:
-                __isValid = self.loadFromFile(fileName)
-            except:
-                __isValid = False
-                
+                        
         
 
     def loadFromFile(self, Source):
@@ -64,7 +57,7 @@ class Laby():
 
     def setDefault(self):
         """
-        Cette fonction créer un labyrinthe de test par défaur
+        Cette fonction créer un labyrinthe de test par défaut
         :return None:
         """
         return None
@@ -81,7 +74,35 @@ class Laby():
         self.CarteEntity = [[None] * self.LX for _ in range(self.LY)]
         self.Carte = bytearray(self.LX *self.LY)
                 
+    # **************************************************************************
+    # ** Réinitialisation de la MAP                                           **
+    # **************************************************************************
+    
+    def reinit(self):
+        """
+        Cette fonction assure la remise à zéro de tous les paramètres et le 
+        rechargement de la carte.  
+        
+        /!\ Seul la liste des joueur est conservée       
+        """
+        
+        self.NomLaby = ''        # Nom du Labyrinthe
+        self.Theme = "Gray"      # Theme graphique du labyrinthe
+        self.LX = -1             # Largeur du Labyrinthe
+        self.LY = -1             # Hauteur du Labyrinthe
+        
+        self.Carte = None        # byte array du labyrinthe
+        self.CarteEntity = []    # Recense la position des joueurs (et monstres)
+        self.CarteFX = []        # Recense les effets dynamiques
+        
+        self.PlayerSponePlace = set()  # Ensemble des positions d'apparition
+        self.MonsterSponePlace = set()  # Ensemble des positions d'apparition
                 
+        self.MonsterList = []    # Liste des monstres
+        self.FXList = {}         # Liste des effets LabyTextFx
+        
+        
+        
     # **************************************************************************
     # ** Gestion des joueurs                                                  **
     # **************************************************************************
@@ -100,22 +121,26 @@ class Laby():
         if PlayerObj in self.PlayerList:
             return False
             
+        # Recherche une position
+        if self.getSponePos(PlayerObj) == False:
+            print("Laby::addPlayer : Erreur lors de la recherche d'une position")
+            return False
+        
         # Ajout du joueur dans la liste
         self.PlayerList.append(PlayerObj)
-        
-        
+                        
         # Lien avec la fonction de contrôle de déplacement
         PlayerObj.OnCheckMove = self.checkPos
         PlayerObj.OnUpdateLabPos = self.updatePlayerPos
         
         # ajout de sa position dans la carte
         if PlayerObj.x < self.LX and PlayerObj.x >= 0 and PlayerObj.y < self.LY and PlayerObj.y >= 0 :
-            self.CarteEntity[PlauerObj.y][PlayerObj.x] = PlayerObj
+            self.CarteEntity[PlayerObj.y][PlayerObj.x] = PlayerObj
         
         
         return True
 
-    def removePlayer(self, PlauerObj):
+    def removePlayer(self, PlayerObj):
         """
         Cette fonction supprime un joueur du labyrinthe
         :param PlayerObj objet représentant un joueur descendant de Entity.py
@@ -125,7 +150,7 @@ class Laby():
         # Vérification que le joueur n'est pas déjà enregistrer
         if PlayerObj in self.PlayerList:
             # Efface la position dans la carte
-            self.CarteEntity[PlauerObj.y][PlayerObj.x] = None
+            self.CarteEntity[PlayerObj.y][PlayerObj.x] = None
             # retire de la liste
             self.PlayerList.remove(PlayerObj)
             return True
@@ -150,6 +175,12 @@ class Laby():
         # Vérification que le monstre n'est pas déjà enregistré
         if MonsterObj in self.MonsterList:
             return False
+            
+        # Recherche une position
+        if self.getSponePos(MonsterObj) == False:
+            print("Laby::addMonster : Erreur lors de la recherche d'une position")
+            return False
+
             
         # Ajout du monstre dans la liste
         self.MonsterList.append(MonsterObj)
@@ -183,12 +214,11 @@ class Laby():
             return True
             
         return False
-        
-    # **************************************************************************
-    # ** Gestion des mouvements des monstres                                  **
-    # ************************************************************************** 
-    
+
     def updateMonster(self,dt):
+        """
+        Gestion des mouvements des monstres
+        """
         # Pour chaque monstre
         for p in self.MonsterList:
             p.doMove(dt)
@@ -276,6 +306,8 @@ class Laby():
         :param ObjPalyer: Joueur; prev_x,prev_y ancienne position
         """
 
+        #print("LabyObj::updatePlayerPos")
+        
         if prev_x >= self.LX or prev_y >= self.LY:
             return False
 
@@ -306,8 +338,62 @@ class Laby():
             
         return True
         
+    def getSponePos(self, ObjEntity, rayon=0):
+        """
+            Selectionne un point d'apparition            
+        """
         
+        if(isinstance(ObjEntity,Entity.Monster)) :
+            T = self.MonsterSponePlace
+        else:
+            T = self.PlayerSponePlace
         
+        (x,y) = random.choice(list(T))
+        
+        # Vérifie qu'il n'y a pas quelqu'un déjà
+        
+        while ((self.checkPos(x,y) == False) and (len(T)>0)):
+            
+            xmin = x - rayon
+            if xmin < 0 : xmin=0
+            xmax = x + rayon
+            if xmax > self.LX : xmax = self.LX-1
+            ymin = y - rayon
+            if ymin < 0 : ymin=0
+            ymax = y + rayon
+            if ymax > self.LY : ymax = self.LY-1
+            
+            for mx in range(xmin,xmax):
+                for my in range(ymin,ymax):
+                    if self.checkPos(mx,my) :                    
+                        ObjEntity.setInitialPos(mx,my)
+                        ObjEntity.x = mx
+                        ObjEntity.y = my
+                        return True
+                    
+
+            T = T - {(x, y)}
+            if len(T) > 0 :
+                (x,y) = random.choice(list(T))
+            else:
+                break
+            
+        if self.checkPos(x,y) :
+            ObjEntity.setInitialPos(x,y)
+            ObjEntity.x = x
+            ObjEntity.y = y
+            return True
+
+        # Limite de recherche avec un rayon de 5
+        if rayon > 3:            
+            print("Laby::getSponePos : limite maximum de recherche de la position de départ atteinte pour l'entité",
+                   ObjEntity.Name) 
+            return False
+        else:
+            self.getSponePos(ObjEntity,rayon+1)
+            
+            
+       
     def updateLight(self, x,y):
         
         """

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import json
+
 import LabyObjects
 
 __author__ = 'Yoann'
@@ -25,14 +27,14 @@ class LabyText(LabyObjects.Laby):
             "+-------+----------++-------+----------+",
             "T       |          ||       |          T",
             "+----+  |  -----+  |+----+  |  -----+  |",
-            "|    |          |  ||    |          |  |",
+            "|@   |          |  ||    |          |  |",
             "| +  +-----+    |  ||    |          |  |",
             "| |        |    |        |          |  |",
             "| +----+   +    +   |    |          |  |",
             "|      |            |    |          |  |",
             "+--+   +------------+   ++          |  |",
-            "|      |            |TTT|           |  |",
-            "+--+   |  +          TTT|           |  |",
+            "|      |            |TTT|        #  |  |",
+            "+--+   |  +          TTT|       #   |  |",
             "|  |   +  |   +-----+TTT|           |  |",
             "|  |      |         +---++          |  |",
             "|  +------+-----+   |   |           |  |",
@@ -42,6 +44,9 @@ class LabyText(LabyObjects.Laby):
             "|  +-+   +----------+    |          |  |",
             "|    |              |    |          | 0|",
             "+----+--------------+----+-------------+"]
+            
+        self.PlayerSponeCode = '@'
+        self.MonsterSponeCode = '#'
     
     
     def _getLinkCode(self,x,y):
@@ -113,6 +118,46 @@ class LabyText(LabyObjects.Laby):
         self.NomLaby = "Labyrinthe par défaut"
         
         # Convertion du labyrinthe Text en format interne
+        self._decodeTxtLaby()
+
+        return None
+        
+        
+    def loadJSON(self,fileName):
+        """
+        Cette fonction assure la lecture d'un fichier au format JSON
+        """
+        
+        # Réinitialise le labyrinthe
+        self.reinit()
+        
+        f = open(fileName)
+        
+        data = json.load(f)
+        
+        self.CarteTxt         = data['Carte']
+        self.NomLaby          = data['NomLaby']
+        self.Theme            = data['Theme']
+        self.IsShadowEnabled  = data['IsShadowEnabled']
+        self.MonsterSponeCode = data['MonsterSponeCode']
+        self.PlayerSponeCode  = data['PlayerSponeCode']
+        
+        # Initialisation des tableaux
+        self.setLXLY(len(self.CarteTxt[0]), len(self.CarteTxt) )
+        
+        # Charge les effets
+        self._loadFXObject(data['FXList'])
+        
+        # Convertion du labyrinthe Text en format interne
+        self._decodeTxtLaby()
+        
+
+
+    def _decodeTxtLaby(self):
+        """
+        Cette fonction assure le décodage du laby en format texte
+        et initialise le format interne de LabyObjet
+        """
         
         # Pour chaque ligne du Labyrinthe
         for ly, ligne in enumerate(self.CarteTxt):
@@ -122,43 +167,60 @@ class LabyText(LabyObjects.Laby):
                 
                 if car == ' ':
                     self.Carte[ly*self.LX + lx] = 0
+                elif car == self.PlayerSponeCode:
+                    self.PlayerSponePlace.add((lx,ly))
+                elif car == self.MonsterSponeCode:
+                    self.MonsterSponePlace.add((lx,ly))
                 elif car not in ('|', '-', '+'):
                     self.Carte[ly*self.LX + lx] = 0
                 else:
                     # Vérifie les cases à proximité
                     self.Carte[ly * self.LX + lx] = self._getLinkCode(lx,ly)
-                    
-                #     if lx > 0: 
-                #         c = ligne[lx-1]
-                #         if ((c in ('|', '-', '+')) or \
-                #            ( (self.CarteFX[ly][lx-1] is not None) and self.FXList[c.upper()].gfxLinkFx(c) )):
-                #             code = code | 0x04
-                #         
-                #     if lx < self.LX-1:
-                #         c = ligne[lx+1] 
-                #         if ((c in ('|', '-', '+')) or \
-                #            ((self.CarteFX[ly][lx+1] is not None) and self.FXList[c.upper()].gfxLinkFx(c))):
-                #             code = code | 0x01
-                #         
-                #     if ly > 0: 
-                #         c = self.CarteTxt[ly-1][lx]
-                #         if ((c in ('|', '-', '+')) or \
-                #            ((self.CarteFX[ly-1][lx] is not None) and self.FXList[c.upper()].gfxLinkFx(c))):
-                #             code = code | 0x02
-                #         
-                #     if ly < self.LY-1:
-                #         c = self.CarteTxt[ly+1][lx]
-                #         if ((c in ('|', '-', '+')) or \
-                #            ((self.CarteFX[ly+1][lx] is not None) and self.FXList[c.upper()].gfxLinkFx(c))):
-                #             code = code | 0x08
-                    
-                #self.Carte[ly * self.LX + lx] = self._getLinkCode(lx,ly)
         
         
         self.__isValid = True
-
-        return None
-
+        
+    def _loadFXObject(self, fxList):
+        """
+        Cette fonction à pour objectif de charger les effets
+        à partir d'une liste
+        """
+        
+        for afx in fxList:
+            
+            # get option if available
+            if 'FXOptions' in afx.keys():
+                options = afx['FXOptions']
+            else:
+                options = None
+                
+            mapCode = afx['MapCode']
+            fxObject= afx['FXHandler']
+            
+            if fxObject == "LabyTextFxAspirateur.LTFxAspirateur":
+                self._registerFx(LabyTextFxAspirateur.LTFxAspirateur(),mapCode)
+                
+            elif fxObject == "LabyTextFxTunnel.LTFxTunnel":
+                self._registerFx(LabyTextFxTunnel.LTFxTunnel(),mapCode)
+                
+            elif fxObject == "LabyTextFxSensUnique.LTFxSensUnique":
+                if options is None:
+                    self._registerFx(LabyTextFxSensUnique.LTFxSensUnique(),mapCode)
+                else:
+                    self._registerFx(LabyTextFxSensUnique.LTFxSensUnique(**options),mapCode)
+                
+            elif fxObject == "LabyTextFxPorte.LTFxPorte":
+                if options is None:
+                    self._registerFx(LabyTextFxPorte.LTFxPorte(),mapCode)
+                else:
+                    self._registerFx(LabyTextFxPorte.LTFxPorte(**options),mapCode)
+                
+            elif fxObject == "LabyTextFxPorteEt.LTFxPorteEt":
+                if options is None:
+                    self._registerFx(LabyTextFxPorteEt.LTFxPorteEt(),mapCode)
+                else:
+                    self._registerFx(LabyTextFxPorteEt.LTFxPorteEt(**options),mapCode)
+                
         
 
 ###

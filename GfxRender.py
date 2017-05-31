@@ -49,15 +49,24 @@ class CtxGfx():
         :return:
         """
 
-        # Création du context graphique
-        self.can = Tk.Canvas(self.fenetre, width=self.nx*self.rx, height=self.ny*self.ry)
+        w = self.nx*self.rx
+        h = self.ny*self.ry
         
-        # Création de le fenêtre ajout des widget
-        self.selectedPlayer = Tk.StringVar()
-        self.playerLKP = ttk.Combobox(self.fenetre)
-        self.playerLKP.pack(side="top")
-        self.playerPV = Tk.Label(self.fenetre, text="PV:?")
-        self.playerPV.pack(side="top")
+        # Création de la barre des infos
+        self.cInfo = Tk.Canvas(self.fenetre, width=w, height=80, bd=0, bg='black')
+        self.cInfo.pack()
+        
+        # Création du context graphique
+        self.can = Tk.Canvas(self.fenetre, width=w, height=h, bd=0, bg='black')
+        
+        # Création de la boite de message
+        x = (w - 240) // 2
+        print("construitInterface",x, w, h)
+        self.msg_cadre = self.cInfo.create_rectangle(w - 2*x, 41, w-240, 80, fill='#00007F', width=2, outline='#FFFFFF')
+        #self.can.itemconfig(self.msg_cadre, state=Tk.HIDDEN)
+        
+        
+      
 
         # création du context graphique
         #self.can = Canvas(self.fenetre, width=600, height=600)
@@ -65,6 +74,11 @@ class CtxGfx():
 
     def addGUIPlayer(self, playerName):
         self.playerLKP['values'] = list(self.playerLKP['values']) + [playerName]
+        
+    def showMessage(self, message):
+        self.cInfo.itemconfig(self.msg_cadre, state=Tk.HIDDEN)
+        
+    
 
 
 # *****************************************************************************
@@ -306,19 +320,17 @@ class GfxRender():
             print("GfxRender:AddUser : Pas de context graphique initialisé !")
             return None
 
-        try:
-            # Création du nouveau joueur (et de son contexte graphique)
-            p = GfxPlayer(self._ctxGfx, initPv=pv, spriteFile=spriteFile)
-            p.Name = playerName
-            
-            # Ajout dans la liste des joueurs
-            self._Map.addPlayer(p)
+        #try:
+        # Création du nouveau joueur (et de son contexte graphique)
+        p = GfxPlayer(self._ctxGfx, initPv=pv, spriteFile=spriteFile)
+        p.Name = playerName
+        
+        # Ajout dans la liste des joueurs
+        self._Map.addPlayer(p)            
 
-            self._ctxGfx.addGUIPlayer(p.Name)
-
-            return p
-        except e:
-            return None
+        return p
+        #except e:
+        #    return None
             
             
     def AddMonster(self, monsterName, speed=2, pv=5000, spriteFile='sprite/Hero/monster.png'):
@@ -500,6 +512,8 @@ class GfxRender():
         
         self.render(dt)
 
+        if len(self._Map.MonsterList) < 3:
+            self._ctxGfx.showMessage('toto')
 
         # Mise à jour de la référence temporelle
         self._lastTime  = cur
