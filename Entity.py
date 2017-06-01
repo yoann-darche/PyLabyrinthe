@@ -125,7 +125,7 @@ class Entity():
         y = self.y
         (self.x,self.y)= coord
         
-        print("Entity::moveToInternal old({0},{1}) new({2},{3})".format(x,y,self.x,self.y))
+        #print("Entity::moveToInternal old({0},{1}) new({2},{3})".format(x,y,self.x,self.y))
         
         try: 
             self.OnUpdateLabPos(self,x,y) 
@@ -153,10 +153,12 @@ class Entity():
         if self.PV <= 0:
             self.PV = 0
             try:
-                self.OnDie()
+                self.OnDie(self)
             except:
-                self.moveToInitialPos()
-                self.PV = self._InitPV
+                pass
+                
+            self.moveToInitialPos()
+            self.PV = self._InitPV
 
         return self.PV
         
@@ -198,6 +200,7 @@ class Monster(Entity):
         self.speed = speed
         self.lastDt = 0
         
+        # Affect l'algorithme de déplacement du monstre
         self.engine = MonsterEngine.MME_Standard
         
         

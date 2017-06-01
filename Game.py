@@ -14,13 +14,13 @@ __author__ = 'Yoann'
 # Vérification que nous sommes dans le programme principal
 if __name__ == "__main__":
 
-    print("Lancement du jeu de labyrinthe V0.60")
+    print("Lancement du jeu de labyrinthe V0.70")
 
     # Création du Labyrinthe
     print("1/ Création du Labyrinthe ....")
     #MonLaby = Laby.LabyText()
     MonLaby = Laby.LabyText()
-    MonLaby.loadJSON('./maps/Intro_001.json')
+    MonLaby.loadJSON('./maps/Default.json')
     #MonLaby.setDefault()
     
     
@@ -29,20 +29,16 @@ if __name__ == "__main__":
     LabyGfx = Gfx.GfxRender(MonLaby)
 
     # Ajout du premier joueur
-    J1 = LabyGfx.AddUser('Yoann', pv=500)
+    J1 = LabyGfx.AddUser('John', pv=200)
     # Affectation des touches
     J1.bindKey({"N": "<Up>", "S": "<Down>", "O": "<Left>", "E": "<Right>"})
     # Positionnement du joueur
-    #   Plus tard il sera nécessaire de faire une fonction pour générer une position
-    #   aléatoire possible dans le labyrinthe
-    #J1.setInitialPos(1,1)
     J1.moveToInitialPos()
 
     # Ajout du second joueur
-    J2 = LabyGfx.AddUser('Inconnu', spriteFile='sprite/Hero/hero2.png', pv=500)
+    J2 = LabyGfx.AddUser('Melba', spriteFile='sprite/Hero/hero2.png', pv=500)
     # Affectation des touches
-    J2.bindKey({"N": "z", "S": "s", "O": "q", "E": "d"})
-    #J2.setInitialPos(1,18)
+    J2.bindKey({"N": "z", "S": "s", "O": "q", "E": "d"})    
     J2.moveToInitialPos()
     
     # Ajout d'un monstre

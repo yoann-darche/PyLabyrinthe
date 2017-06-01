@@ -50,6 +50,8 @@ class LTFxAspirateur(LabyTextFx.LabyTextFx):
         
         ObjEntity.kill()
         self._Map.removeMonster(ObjEntity)
+        self._Map.pushMessage("Yes ! un monstre de moins....",3)
+        self._Map.pushMessage("Bye Bye " + ObjEntity.Name,3)
                 
         return (-1,-1)
         

@@ -39,6 +39,10 @@ class CtxGfx():
         self.playerPV = None         # Zone text pour afficher les info d'un joueur
 
 
+        # Message par défut
+        self._defaultMsg = title
+        self._callbackID = None
+
         self.fenetre = Tk.Tk()
         self.fenetre.title(title)
         
@@ -53,7 +57,7 @@ class CtxGfx():
         h = self.ny*self.ry
         
         # Création de la barre des infos
-        self.cInfo = Tk.Canvas(self.fenetre, width=w, height=80, bd=0, bg='black')
+        self.cInfo = Tk.Canvas(self.fenetre, width=w, height=80, bd=0, bg='black')        
         self.cInfo.pack()
         
         # Création du context graphique
@@ -61,11 +65,11 @@ class CtxGfx():
         
         # Création de la boite de message
         x = (w - 240) // 2
-        print("construitInterface",x, w, h)
+        #print("construitInterface",x, w, h)
         self.msg_cadre = self.cInfo.create_rectangle(w - 2*x, 41, w-240, 80, fill='#00007F', width=2, outline='#FFFFFF')
-        #self.can.itemconfig(self.msg_cadre, state=Tk.HIDDEN)
         
-        
+        self.cInfoMsg = self.cInfo.create_text(w // 2, 60, width=w-240, fill='white', 
+                             text=self._defaultMsg, justify=Tk.LEFT, font=('Courrier', 20,))
       
 
         # création du context graphique
@@ -74,12 +78,56 @@ class CtxGfx():
 
     def addGUIPlayer(self, playerName):
         self.playerLKP['values'] = list(self.playerLKP['values']) + [playerName]
-        
-    def showMessage(self, message):
-        self.cInfo.itemconfig(self.msg_cadre, state=Tk.HIDDEN)
-        
-    
 
+
+    # **************************************************************************
+    # **  Fonctions de gestion de l'affichage des messages.                   **
+    # **************************************************************************
+        
+    def setDefaultMsg(self, msg):
+        
+        self._defaultMsg = msg
+        
+        
+    def showMessage(self, message, time=5):
+        """
+        Cette fonction assure l'affichage du message pendant time ms
+        """                
+        
+        # Affiche le cadre des message        
+        self.cInfo.itemconfig(self.cInfoMsg, text=message)     
+        print("MSG: ",message)   
+        self.msgTimeToLive = time
+        
+
+        
+    def clearMessage(self):
+        
+        """
+        Fonction appelée après n ms pour effacer le message
+        """
+        
+        # Affiche le cadre des message        
+        self.cInfo.itemconfig(self.cInfoMsg, text=self._defaultMsg)
+        self.msgTimeToLive = -1
+    
+    def doUpdate(self,dt, LabyObj):
+        """
+        Fonction assurant la mise à jour de l'interface
+        """        
+        
+        # Gestion des messages
+        if self.msgTimeToLive > 0:
+            self.msgTimeToLive -= dt
+            if self.msgTimeToLive <= 0:
+                if LabyObj.countMessage() == 0:
+                    self.clearMessage()
+            elif (self.msgTimeToLive > 2) and (LabyObj.countMessage() > 0):
+                self.msgTimeToLive = 2
+        else:
+            (m,t) = LabyObj.popMessage()
+            if m is not None:
+                self.showMessage(m,t)
 
 # *****************************************************************************
 # ** Classe dérivant du Player pour introduire les spécificité de l'affichage**
@@ -372,6 +420,10 @@ class GfxRender():
         # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         # Dessine le fond
+        
+        self._ctxGfx.setDefaultMsg(self._Map.NomLaby)
+        self._ctxGfx.showMessage('Bienvenu dans')
+        
 
         self.plateau = Image.new('RGBA',(self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), (255,255,255,255))
         
@@ -501,6 +553,10 @@ class GfxRender():
         # Calcule la différence
         dt = cur - self._lastTime
 
+
+        # Mise à jour de l'interface
+        self._ctxGfx.doUpdate(dt, self._Map)
+
         # Mise à jour des positions des monstres
         self._Map.updateMonster(dt)
         
@@ -512,8 +568,6 @@ class GfxRender():
         
         self.render(dt)
 
-        if len(self._Map.MonsterList) < 3:
-            self._ctxGfx.showMessage('toto')
 
         # Mise à jour de la référence temporelle
         self._lastTime  = cur

@@ -40,6 +40,10 @@ class Laby():
         self.PlayerList = []     # Liste des joueurs
         self.MonsterList = []    # Liste des monstres
         self.FXList = {}         # Liste des effets LabyTextFx
+        self.MsgList = []        # Liste des messages à afficher
+        
+        
+        self.OnFinish = None     # CallBack utilisé pour indiquer la fin de partie
         
     
         # Propriétés d'état de la classe
@@ -132,6 +136,7 @@ class Laby():
         # Lien avec la fonction de contrôle de déplacement
         PlayerObj.OnCheckMove = self.checkPos
         PlayerObj.OnUpdateLabPos = self.updatePlayerPos
+        PlayerObj.OnDie = self.diePlayer
         
         # ajout de sa position dans la carte
         if PlayerObj.x < self.LX and PlayerObj.x >= 0 and PlayerObj.y < self.LY and PlayerObj.y >= 0 :
@@ -156,6 +161,10 @@ class Laby():
             return True
             
         return False
+        
+    def diePlayer(self,PlayerObj):
+        
+        self.pushMessage(PlayerObj.Name + " est très fatigué(e)... retour à la case départ")
 
 
     # **************************************************************************
@@ -211,6 +220,14 @@ class Laby():
             self.CarteEntity[MonsterObj.y][MonsterObj.x] = None
             # retire de la liste
             self.MonsterList.remove(MonsterObj)
+            
+            # Si il n'y a plus de monstre alors on appelle la call back
+            if len(self.MonsterList) < 1:
+                try:
+                    self.OnFinish(self)
+                except:
+                    pass
+            
             return True
             
         return False
@@ -505,7 +522,28 @@ class Laby():
             
         return False
        
+    # **************************************************************************
+    # ** Gestion des messages                                                 **
+    # **************************************************************************
+    
+    def pushMessage(self, Message, Temps=5):
+        """
+        Fonction assurant la collecte des message, le paramètre temps indique
+        le temps d'affichage du message en secondes
+        """
+        
+        self.MsgList.insert(0,(Message,Temps))
+        
+    def popMessage(self):
+        
+        if(len(self.MsgList) > 0) :
+            return self.MsgList.pop()
+        else:
+            return (None,None)
 
+    def countMessage(self):
+        
+        return(len(self.MsgList))
         
 
     @property
