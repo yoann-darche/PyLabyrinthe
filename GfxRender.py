@@ -199,7 +199,6 @@ class GfxPlayer(Player):
         else:
             self._ctxGfx.can.coords(self._img, self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry)
             self._ctxGfx.can.tag_raise(self._img) 
-            
 
         self._hasChanged = False
 
@@ -256,9 +255,19 @@ class GfxMonster(Monster):
             return None
 
         if self._img is None:
-            self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
+            if self.isVisible:
+                self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
                                                       image=self.Sprite, tag='sprite')
+            else:
+                self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
+                                                      image=self.Sprite, tag='sprite', state=Tk.HIDDEN)
+                            
         else:
+            if self.isVisible:
+                self._ctxGfx.can.itemconfig(self._img, state=Tk.NORMAL) 
+            else:
+                self._ctxGfx.can.itemconfig(self._img, state=Tk.HIDDEN) 
+            
             self._ctxGfx.can.coords(self._img, self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry)
             self._ctxGfx.can.tag_raise(self._img) 
             

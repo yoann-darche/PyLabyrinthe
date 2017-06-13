@@ -1,7 +1,7 @@
 {
     "NomLaby"           : "Le début",
-    "Theme"             : "Blue",    
-    "IsShadowEnabled"   : false,
+    "Theme"             : "RuineDeTerre",    
+    "IsShadowEnabled"   : true,
     "PlayerSponeCode"   : "@",
     "MonsterSponeCode"  : "#",
     "Carte"   : [
@@ -62,7 +62,7 @@
         { "MapCode"     : "S", 
           "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt"},
         { "MapCode"     : "U", 
-          "FXHandler"   : "LabyTextFxPorte.LTFxPorteEt",
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt",
           "FXOptions"   : { "closeTime" : 7} }
         ]
  

@@ -23,6 +23,9 @@ class Entity():
         
         self._InitPV = initpv
         self.PV = self._InitPV
+        
+        self.isLightUpdater = True   # Indique si l'entité met à jour les zone éclairé du labyrinthe
+        self.isVisible      = True
 
         self._hasChanged = False
 
@@ -30,6 +33,8 @@ class Entity():
         self.OnCheckMove = None
         self.OnUpdateLabPos = None
         self.OnDie = None
+        
+
                 
                 
     def restart(self):
@@ -67,19 +72,19 @@ class Entity():
         if direction == 'N' and self.OnCheckMove(self.x, self.y-1, self):
             self.y -= 1
             self.allowedDir = ('N','S','E','O')
-            self.OnUpdateLabPos(self,self.x,self.y+1)            
+            res = self.OnUpdateLabPos(self,self.x,self.y+1)            
         elif direction == 'S' and self.OnCheckMove(self.x, self.y+1, self):
             self.y += 1
             self.allowedDir = ('N','S','E','O')
-            self.OnUpdateLabPos(self,self.x,self.y-1)
+            res = self.OnUpdateLabPos(self,self.x,self.y-1)
         elif direction == 'E' and self.OnCheckMove(self.x+1, self.y, self):
             self.x += 1
             self.allowedDir = ('N','S','E','O')
-            self.OnUpdateLabPos(self,self.x-1,self.y)            
+            res = self.OnUpdateLabPos(self,self.x-1,self.y)            
         elif direction == 'O' and self.OnCheckMove(self.x-1, self.y, self):
             self.x -= 1
             self.allowedDir = ('N','S','E','O')
-            self.OnUpdateLabPos(self,self.x+1,self.y)
+            res = self.OnUpdateLabPos(self,self.x+1,self.y)
         else:
             return False
         #except:
@@ -90,6 +95,14 @@ class Entity():
          
         self.changePv(-1)
         self._hasChanged = True
+
+        # La valeur de retour de OnUpdateLabPos peut être None !
+        if res == True:
+            self.isVisible = True
+        elif res == False:
+            self.isVisible = False
+                    
+        
         return True
         
     def moveToInitialPos(self):
@@ -128,7 +141,11 @@ class Entity():
         #print("Entity::moveToInternal old({0},{1}) new({2},{3})".format(x,y,self.x,self.y))
         
         try: 
-            self.OnUpdateLabPos(self,x,y) 
+            res = self.OnUpdateLabPos(self,x,y)
+            if res == True:
+                self.isVisible = True
+            elif res == False:
+                self.isVisible = False
         except:
             pass
 
@@ -194,6 +211,10 @@ class Monster(Entity):
         
         # Appel de l'init de la classe parente (Entity)
         Entity.__init__(self, initpv)
+        
+        # Par défaut les monstre ne découvre pas le labyrinthe
+        self.isLightUpdater = False
+        self.isVisible      = False
         
         self.OnAvlDir = None # Recherche les direction possible
         

@@ -321,12 +321,13 @@ class Laby():
         Cette fonction est utiliser pour mettre à jour la carte avec la position 
         du joueur.
         :param ObjPalyer: Joueur; prev_x,prev_y ancienne position
+        :returns: None si ce n'est pas possible, sinon True ou False pour dire visible ou pas
         """
 
         #print("LabyObj::updatePlayerPos")
         
         if prev_x >= self.LX or prev_y >= self.LY:
-            return False
+            return None
 
         if self.CarteFX[ObjPlayer.y][ObjPlayer.x] is not None:
             (nx,ny) = self.CarteFX[ObjPlayer.y][ObjPlayer.x](ObjPlayer,'apply') 
@@ -351,9 +352,14 @@ class Laby():
 
          
         # Calcul de la lumière
-        self.updateLight(ObjPlayer.x,ObjPlayer.y) 
+        if ObjPlayer.isLightUpdater:
+            self.updateLight(ObjPlayer.x,ObjPlayer.y) 
             
-        return True
+        # Calcul de la visibilitée
+        if self.IsShadowEnabled and (self.Carte[ObjPlayer.y * self.LX + ObjPlayer.x] & 0xF0 == 0):
+            return False
+        else:
+            return True
         
     def getSponePos(self, ObjEntity, rayon=0):
         """
