@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import os
 
 import LabyObjects
 
@@ -131,7 +132,7 @@ class LabyText(LabyObjects.Laby):
         # Réinitialise le labyrinthe
         self.reinit()
         
-        f = open(fileName)
+        f = open(fileName, "r", encoding="utf8")
         
         data = json.load(f)
         

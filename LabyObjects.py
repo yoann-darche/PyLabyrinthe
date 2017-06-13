@@ -37,8 +37,7 @@ class Laby():
         self.PlayerSponePlace = set()  # Ensemble des positions d'apparition
         self.MonsterSponePlace = set()  # Ensemble des positions d'apparition
                 
-        self.PlayerList = []     # Liste des joueurs
-        self.MonsterList = []    # Liste des monstres
+        self.PlayerList = []     # Liste des joueurs        
         self.FXList = {}         # Liste des effets LabyTextFx
         self.MsgList = []        # Liste des messages à afficher
         
@@ -101,8 +100,7 @@ class Laby():
         
         self.PlayerSponePlace = set()  # Ensemble des positions d'apparition
         self.MonsterSponePlace = set()  # Ensemble des positions d'apparition
-                
-        self.MonsterList = []    # Liste des monstres
+                        
         self.FXList = {}         # Liste des effets LabyTextFx
         
         
@@ -166,79 +164,6 @@ class Laby():
         
         self.pushMessage(PlayerObj.Name + " est très fatigué(e)... retour à la case départ")
 
-
-    # **************************************************************************
-    # ** Gestion des Monstres                                                 **
-    # **************************************************************************   
-
-    def addMonster(self, MonsterObj):
-        """
-        Cette fonction ajoute un monstre dans le labyrinthe
-        :param MonsterObj objet représentant un monstre descendant de Entity.py
-        :return True/False
-        """
-        # Vérification que l'objet est bien un descendant de Monster
-        if not(isinstance(MonsterObj,Entity.Monster)):
-            return False
-            
-        # Vérification que le monstre n'est pas déjà enregistré
-        if MonsterObj in self.MonsterList:
-            return False
-            
-        # Recherche une position
-        if self.getSponePos(MonsterObj) == False:
-            print("Laby::addMonster : Erreur lors de la recherche d'une position")
-            return False
-
-            
-        # Ajout du monstre dans la liste
-        self.MonsterList.append(MonsterObj)
-        
-        
-        # Lien avec la fonction de contrôle de déplacement
-        MonsterObj.OnCheckMove = self.checkPos
-        MonsterObj.OnUpdateLabPos = self.updatePlayerPos
-        MonsterObj.OnAvlDir = self.getAvlDir
-        
-        # ajout de sa position dans la carte
-        if MonsterObj.x < self.LX and MonsterObj.x >= 0 and MonsterObj.y < self.LY and MonsterObj.y >= 0 :
-            self.CarteEntity[MonsterObj.y][MonsterObj.x] = MonsterObj
-        
-        
-        return True
-
-    def removeMonster(self, MonsterObj):
-        """
-        Cette fonction supprime un monstre du labyrinthe
-        :param MonsterObj objet représentant un monster descendant de Entity.py
-        :return True/False
-        """ 
-        
-        # Vérification que le monstre est bien enregistré
-        if MonsterObj in self.MonsterList:
-            # Efface la position dans la carte
-            self.CarteEntity[MonsterObj.y][MonsterObj.x] = None
-            # retire de la liste
-            self.MonsterList.remove(MonsterObj)
-            
-            # Si il n'y a plus de monstre alors on appelle la call back
-            if len(self.MonsterList) < 1:
-                try:
-                    self.OnFinish(self)
-                except:
-                    pass
-            
-            return True
-            
-        return False
-
-    def updateMonster(self,dt):
-        """
-        Gestion des mouvements des monstres
-        """
-        # Pour chaque monstre
-        for p in self.MonsterList:
-            p.doMove(dt)
         
     # **************************************************************************
     # ** Gestion des Déplacements                                             **
@@ -352,14 +277,15 @@ class Laby():
 
          
         # Calcul de la lumière
-        if ObjPlayer.isLightUpdater:
-            self.updateLight(ObjPlayer.x,ObjPlayer.y) 
+        if self.IsShadowEnabled:
+            if ObjPlayer.isLightUpdater:
+                self.updateLight(ObjPlayer.x,ObjPlayer.y) 
+                
+            # Calcul de la visibilitée
+            if self.Carte[ObjPlayer.y * self.LX + ObjPlayer.x] & 0xF0 == 0:
+                return False
             
-        # Calcul de la visibilitée
-        if self.IsShadowEnabled and (self.Carte[ObjPlayer.y * self.LX + ObjPlayer.x] & 0xF0 == 0):
-            return False
-        else:
-            return True
+        return True
         
     def getSponePos(self, ObjEntity, rayon=0):
         """
@@ -403,8 +329,6 @@ class Laby():
             
         if self.checkPos(x,y) :
             ObjEntity.setInitialPos(x,y)
-            ObjEntity.x = x
-            ObjEntity.y = y
             return True
 
         # Limite de recherche avec un rayon de 5
@@ -567,5 +491,130 @@ class Laby():
         """
         return (self.LX,self.LY)
 
+# ==============================================================================
+# == Gestion de la liste des monstres                                         ==
+# ==============================================================================
+
+class MonsterList:
+    
+    def __init__(self, LabyObject):
+        
+        self._map = LabyObject
+        self.ActiveMonsterList = []      # Liste des monstres actifs
+        self.InActiveMonsterList = []    # Liste des monstres mort ou inactif
+        
+        self.OnFinish = None            # Call back quand il n'y a plus de monstres actifs
+
+    
+    def addMonster(self, MonsterObj):
+        """
+        Cette fonction ajoute un monstre dans le labyrinthe
+        :param MonsterObj objet représentant un monstre descendant de Entity.py
+        :return True/False
+        """
+        # Vérification que l'objet est bien un descendant de Monster
+        if not(isinstance(MonsterObj,Entity.Monster)):
+            return False
+            
+        # Vérification que le monstre n'est pas déjà enregistré
+        if (MonsterObj in self.ActiveMonsterList) or (MonsterObj in self.InActiveMonsterList):
+            return False
+            
+        # Recherche une position
+        if self._map.getSponePos(MonsterObj) == False:
+            print("MonsterList::addMonster : Erreur lors de la recherche d'une position")
+            return False
+
+            
+        # Ajout du monstre dans la liste
+        self.ActiveMonsterList.append(MonsterObj)
+        
+        
+        # Lien avec la fonction de contrôle de déplacement
+        MonsterObj.OnCheckMove = self._map.checkPos
+        MonsterObj.OnUpdateLabPos = self._map.updatePlayerPos
+        MonsterObj.OnAvlDir = self._map.getAvlDir
+        MonsterObj._mgr =  self
+        
+        # ajout de sa position dans la carte
+        if MonsterObj.x < self._map.LX and MonsterObj.x >= 0 and MonsterObj.y < self._map.LY and MonsterObj.y >= 0 :
+            self._map.CarteEntity[MonsterObj.y][MonsterObj.x] = MonsterObj
+        
+        
+        return True
+
+    def removeMonster(self, MonsterObj):
+        """
+        Cette fonction supprime un monstre du labyrinthe
+        :param MonsterObj objet représentant un monster descendant de Entity.py
+        :return True/False
+        """ 
+        
+        # Vérification que le monstre est bien enregistré
+        if MonsterObj in self.ActiveMonsterList:
+            # Efface la position dans la carte
+            self._map.CarteEntity[MonsterObj.y][MonsterObj.x] = None
+            # Transfert le monstre de la liste Active vers la liste inactive
+            self.ActiveMonsterList.remove(MonsterObj)
+            self.InActiveMonsterList.append(MonsterObj)            
+            
+            # Si il n'y a plus de monstre alors on appelle la call back
+            if len(self.ActiveMonsterList) < 1:
+                try:
+                    self.OnFinish(self)
+                except:
+                    pass
+            
+            return True
+            
+        return False
+
+    def updateMonster(self,dt):
+        """
+        Gestion des mouvements des monstres
+        """
+        # Pour chaque monstre
+        for p in self.ActiveMonsterList:
+            p.doMove(dt)
+            
+    def deleteMonster(self, MonsterObj):
+        """
+        Cette fonction supprime le monstre des 2 listes
+        """
+        
+        if MonsterObj in self.ActiveMonsterList:
+            # Efface la position dans la carte
+            self._map.CarteEntity[MonsterObj.y][MonsterObj.x] = None
+            self.ActiveMonsterList.remove(MonsterObj)
+            
+        if MonsterObj in self.InActiveMonsterList:
+            self.ActiveMonsterList.remove(MonsterObj)
+            
+    def reinitMonster(self):
+        """
+            Cette fonction reactive tous les monstres
+        """
+                
+        for p in self.ActiveMonsterList:
+            
+            if self._map.getSponePos(p) == False:
+                print("MonsterList::reinitMonster : Erreur lors de la recherche d'une position")                
+            p.restart()
+            
+        for p in self.InActiveMonsterList:
 
 
+            print("Trainetement du monstre : ",p)
+
+            # Repositionne le monstre sur la carte
+            if self._map.getSponePos(p) == False:
+                print("MonsterList::reinitMonster : Erreur lors de la recherche d'une position")
+            else:
+                print("MonsterList::reinitMonster: transfert du monstre ",p)
+                self.InActiveMonsterList.remove(p)
+                self.ActiveMonsterList.append(p)
+                
+            p.restart()
+                
+            
+            

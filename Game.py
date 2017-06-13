@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import GfxRender as Gfx
+import LabyObjects as LabyObj
 import LabyText as Laby
 import MonsterEngine
 
@@ -23,10 +24,12 @@ if __name__ == "__main__":
     MonLaby.loadJSON('./maps/Default.json')
     #MonLaby.setDefault()
     
+    # Création de la liste des monstres
+    MonsterMgr = LabyObj.MonsterList(MonLaby)
     
     # Création du context Graphique
     print("2/ Création de l'environnement Graphique")
-    LabyGfx = Gfx.GfxRender(MonLaby)
+    LabyGfx = Gfx.GfxRender(MonLaby,MonsterMgr)
 
     # Ajout du premier joueur
     J1 = LabyGfx.AddUser('John', pv=200)
@@ -40,6 +43,9 @@ if __name__ == "__main__":
     # Affectation des touches
     J2.bindKey({"N": "z", "S": "s", "O": "q", "E": "d"})    
     J2.moveToInitialPos()
+    
+    
+
     
     # Ajout d'un monstre
     M = LabyGfx.AddMonster('AHRRR', speed=0.5, pv=500)

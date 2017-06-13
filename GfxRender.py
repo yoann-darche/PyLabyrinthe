@@ -128,7 +128,19 @@ class CtxGfx():
             (m,t) = LabyObj.popMessage()
             if m is not None:
                 self.showMessage(m,t)
-
+                
+                
+    # **************************************************************************
+    # **  Fonctions de gestion de l'affichage des montres.                    **
+    # **************************************************************************
+    
+    def doMonsterStatus(self, MonsterList):
+        
+        pass
+        
+    
+    
+    
 # *****************************************************************************
 # ** Classe dérivant du Player pour introduire les spécificité de l'affichage**
 # ** en mode graphique.                                                      **
@@ -283,8 +295,11 @@ class GfxMonster(Monster):
             self._ctxGfx.can.delete(self._img)
             self._img = None
         
-        self._ctxGfx.can.delete(self.Sprite)
-        self.Sprite = None
+        #self._ctxGfx.can.delete(self.Sprite)
+        #self.Sprite = None
+        
+        # Appel de la fonction héritée
+        Monster.kill(self)
         
         #print("GfxMonster::kill:tagList AFTER:",self._ctxGfx.can.find_all())
 
@@ -293,7 +308,7 @@ class GfxMonster(Monster):
 # **************************************************************************
 class GfxRender():
 
-    def __init__(self, laby):
+    def __init__(self, laby, monsterList):
         
          
         # Initialisation du callback de mise à jour des IA
@@ -312,6 +327,7 @@ class GfxRender():
 
         # Mémorisation de la référence sur l'objet de type Laby
         self._Map = laby
+        self._MonsterList = monsterList
 
         # Création du context Graphique
         self._ctxGfx = CtxGfx()
@@ -407,7 +423,7 @@ class GfxRender():
             p.Name = monsterName
             
             # Ajout dans la liste des joueurs
-            self._Map.addMonster(p)
+            self._MonsterList.addMonster(p)
             
             return p
         except e:
@@ -547,7 +563,7 @@ class GfxRender():
             p.render(dt)
             
         # Pour chaque monstre
-        for p in self._Map.MonsterList:
+        for p in self._MonsterList.ActiveMonsterList:
             p.render(dt)
         
 
@@ -567,7 +583,7 @@ class GfxRender():
         self._ctxGfx.doUpdate(dt, self._Map)
 
         # Mise à jour des positions des monstres
-        self._Map.updateMonster(dt)
+        self._MonsterList.updateMonster(dt)
         
         # Appel du callback pour MAj de l'IA...
         try:

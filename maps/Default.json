@@ -1,7 +1,7 @@
 {
     "NomLaby"           : "Le début",
     "Theme"             : "RuineDeTerre",    
-    "IsShadowEnabled"   : true,
+    "IsShadowEnabled"   : false,
     "PlayerSponeCode"   : "@",
     "MonsterSponeCode"  : "#",
     "Carte"   : [

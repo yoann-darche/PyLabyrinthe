@@ -15,14 +15,17 @@ class Entity():
 
     def __init__(self, initpv = 100):
 
+
+        self._mgr = None            # Pointeur sur la Classe de gestion des monstres
+
         self.Name = "nobody"
         self.x = -1
         self.y = -1
         self.lastDir = None
         self.allowedDir = ('N', 'S', 'E', 'O')
         
-        self._InitPV = initpv
-        self.PV = self._InitPV
+        self._initPV = initpv
+        self.PV = self._initPV
         
         self.isLightUpdater = True   # Indique si l'entité met à jour les zone éclairé du labyrinthe
         self.isVisible      = True
@@ -41,11 +44,10 @@ class Entity():
         """
         Cette fonction est appelée pour réinitialiser la position de l'entité
         """
-        self.x = self._initX
-        self.y = self._initY
-        self.PV = self._InitPV
+        self.PV = self._initPV
         self.lastDir = None
         self.allowedDir = ('N', 'S', 'E', 'O')
+        self.moveToInitialPos()
         
     def setInitialPos(self,x,y):
         """
@@ -175,13 +177,23 @@ class Entity():
                 pass
                 
             self.moveToInitialPos()
-            self.PV = self._InitPV
+            self.PV = self._initPV
 
         return self.PV
         
     def setAllowedMove(self, dirs= ('N','S','E','O')):
         
         self.allowedDir = dirs
+        
+    def kill(self):
+        """
+        Fonction assurant la suppression du monstres (logique)
+        """
+        
+        self._mgr.removeMonster(self)
+        
+        
+        
 
 
 
