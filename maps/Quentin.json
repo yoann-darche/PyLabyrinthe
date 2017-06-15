@@ -1,16 +1,17 @@
 {
     "NomLaby"           : "Le début",
-    "Theme"             : "Blue",    
+    "Theme"             : "RuineDeTerre",    
     "IsShadowEnabled"   : true,
-    "SponeCode"         : "@",
+    "PlayerSponeCode"   : "@",
+    "MonsterSponeCode"  : "#",
     "Carte"   : [
             "+------+-----------+--------+----------+",
-            "T @    |q          |        | A        T",
+            "T      |q          |        | A        T",
             "+----+ | --_----+  | +---+  |  ------+ |",
-            "|    |    >p>   |  | |   |           | |",
-            "| +  +--P-+ +-+ |  + + + +-R-+^----+ | |",
-            "| |           | |      | |@ p|  r  < | |",
-            "| +----+ +--+ + +---+  | P   +^----+ | |",
+            "|    |    >p>   |  | |#  |           | |",
+            "|    +--P-+ +-+ |  + + + +-R-+^----+ | |",
+            "|             | |      | |  p|  r  < | |",
+            "|_ ----+ +--+  +---+  | P   +^--- +  | |",
             "|      < |          | ++ |1 1>  q T| | |",
             "+--+   + +--------+1+ |  +-Q-+-----+-+ |",
             "|s     | |        +++ | ++         |   |",
@@ -20,10 +21,10 @@
             "|  +-+  + +-----+ | |   | ++   Su+   | |",
             "T       |       | | < | | |  +---+---+^|",
             "|    +--+-+     | | +-+ |   ++      s| |",
-            "|    |       @  + + | | +++ +  +-----+ |",
+            "|    |          + + | | +++ +  +-----+ |",
             "| +--+ +------+     | |   |         u| |",
             "|   @|        +-----+ + + +------+U+-+ |",
-            "|    |        |T  q |   |              |",
+            "|   @|        |T  q |   |              |",
             "+----+--------------+---+--------------+"
     ],
     "FXList"    : [
@@ -35,16 +36,16 @@
           
         { "MapCode"     : "^", 
           "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
-          "FXOptions"   : "dir='N'" },
+          "FXOptions"   : { "dir" : "N" } },
         { "MapCode"     : "_", 
           "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
-          "FXOptions"   : "dir='S'" },
+          "FXOptions"   : { "dir" : "S" } },
         { "MapCode"     : "<", 
           "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
-          "FXOptions"   : "dir='O'" },
+          "FXOptions"   : { "dir" : "O" } },
         { "MapCode"     : ">", 
           "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
-          "FXOptions"   : "dir='E'" },
+          "FXOptions"   : { "dir" : "E" } },
 
           
         { "MapCode"     : "P", 
@@ -52,17 +53,17 @@
 
         { "MapCode"     : "Q", 
           "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
-          "FXOptions"   : "closeTime=8" },
+          "FXOptions"   : { "closeTime" : 8} },
           
         { "MapCode"     : "R", 
           "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
-          "FXOptions"   : "closeTime=4" },
+          "FXOptions"   : { "closeTime" : 4} },
         
         { "MapCode"     : "S", 
           "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt"},
         { "MapCode"     : "U", 
-          "FXHandler"   : "LabyTextFxPorte.LTFxPorteEt",
-          "FXOptions"   : "closeTime=7" }
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt",
+          "FXOptions"   : { "closeTime" : 7} }
         ]
  
 }

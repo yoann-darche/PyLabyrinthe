@@ -515,7 +515,8 @@ class MonsterList:
         self.InActiveMonsterList = []    # Liste des monstres mort ou inactif
         
         self.OnFinish = None            # Call back quand il n'y a plus de monstres actifs
-
+        
+        self.hasUpdate = False
     
     def addMonster(self, MonsterObj):
         """
@@ -551,6 +552,7 @@ class MonsterList:
         if MonsterObj.x < self._map.LX and MonsterObj.x >= 0 and MonsterObj.y < self._map.LY and MonsterObj.y >= 0 :
             self._map.CarteEntity[MonsterObj.y][MonsterObj.x] = MonsterObj
         
+        self.hasUpdate = True
         
         return True
 
@@ -568,6 +570,8 @@ class MonsterList:
             # Transfert le monstre de la liste Active vers la liste inactive
             self.ActiveMonsterList.remove(MonsterObj)
             self.InActiveMonsterList.append(MonsterObj)            
+            
+            self.hasUpdate = True
             
             # Si il n'y a plus de monstre alors on appelle la call back
             if len(self.ActiveMonsterList) < 1:
@@ -597,9 +601,11 @@ class MonsterList:
             # Efface la position dans la carte
             self._map.CarteEntity[MonsterObj.y][MonsterObj.x] = None
             self.ActiveMonsterList.remove(MonsterObj)
+            self.hasUpdate = True
             
         if MonsterObj in self.InActiveMonsterList:
             self.ActiveMonsterList.remove(MonsterObj)
+            self.hasUpdate = True
             
     def reinitMonster(self):
         """
@@ -626,6 +632,8 @@ class MonsterList:
                 self.ActiveMonsterList.append(p)
                 
             p.restart()
+            
+        self.hasUpdate = True
                 
             
             

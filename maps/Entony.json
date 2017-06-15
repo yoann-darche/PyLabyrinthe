@@ -1,34 +1,29 @@
 {
-    "NomLaby"           : "Trouve ton chemin",
+    "NomLaby"           : "The ONE MAP",
     "Theme"             : "RuineDeTerre",    
     "IsShadowEnabled"   : true,
     "PlayerSponeCode"   : "@",
     "MonsterSponeCode"  : "#",
     "Carte"   : [
-            "+--------------+---+--------+----------+",
-            "|              |            <          |",
-            "|   @ @  +---+ + +--------+ |  +-----+ |",
-            "|            |   |        | |  S    T| |",
-            "|   @ @  Z Z | + +  +---+ | +--------+ |",
-            "|        Z Z | +-+--+     |            |",
-            "| ZZ ZZZZZ Z |        ----+ + ZZZZZ ZZZ|",
-            "|  Z Z   Z Z +------+       | Z     Z  |",
-            "|Z Z Z Z Z Z        +-------+ZZ Z Z Z  |",
-            "|  Z   Z   Z ZZZZZZ      Z    Z Z Z    |",
-            "| ZZZZZZ Z Z      Z ZZ Z   ZZBZ Z ZZZZZ|",
-            "| Z    Z Z ZZZZZZ Z ZZ ZZZZZ  Z Z      |",
-            "| Z ZZ Z Z  Z   Z      Z     ZZ +------+",
-            "|    Z Z ZZ   Z Z ZZZZZZ ZsZ Z  |     p|",
-            "| Z  Z Z  ZZZZZ   Z      +------+T+----+",
-            "| ZZ Z Z      Z Z ZZZZZZZ|      | |qA  |",
-            "| Z  Z ZZZZZZ Z ZZZ      | +---P+_---+ |",
-            "| Z ZZ      Z Z_ZT  ZZ Z | |u       u| |",
-            "| Z Zs ZZZZ Z Z ZZZZZZ Z | > #     # < |",
-            "| ZZZZ    | Z Z    < ZZZ | |         | |",
-            "|BZ     Z | Z Z Z  Z     | | #  u  # | |",
-            "| ZZZZZZZ | ZZZ +------^-+ +--U------+ |",
-            "|         |  B        <A Q             |",
-            "+----+----+--------------+-------------+"
+            "+-----------------+----------------------------------+",
+            "|A                <                                 A|",
+            "|                 +          +     #                 |",
+            "|      +---                  |                       |",
+            "|      |          +----+ +---+------_-^----+         |",
+            "|                 |    |T|                 |     +---+",
+            "+-+-------------+^+----+-+                 |     |T  |",
+            "|T|                 #    | T               | +---+   |",
+            "|r+R---------------------+-----------------+R+----R--+",
+            "|                                                   r|",
+            "|                                 +-------+          |",
+            "|         --------+    A        r |      T|          |",
+            "|      |          |               |                  |",
+            "|      |          |           ----+                  |",
+            "|#                |                                 #|",
+            "+-^-+-------_--R--+-------------+-----^--_-------+-^-+",
+            "|   |                           |                |   |",
+            "|@ T|          T#       r       |      #T        |T @|",
+            "+---+---------------------------+----------------+---+"
     ],
     "FXList"    : [
         { "MapCode"     : "T", 
@@ -66,11 +61,7 @@
           "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt"},
         { "MapCode"     : "U", 
           "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt",
-          "FXOptions"   : { "closeTime" : 4} },
-		  
-		{ "MapCode"     : "B", 
-          "FXHandler"   : "LabyTextFxBlackOut.LTFxBlackOut"} 
-		  
+          "FXOptions"   : { "closeTime" : 7} }
         ]
  
 }

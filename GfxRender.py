@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from PIL import Image, ImageDraw, ImageTk
+from PIL import Image, ImageDraw, ImageTk, ImageEnhance
 import tkinter as Tk
 import tkinter.ttk as ttk
 import os
@@ -39,13 +39,16 @@ class CtxGfx():
         self.playerPV = None         # Zone text pour afficher les info d'un joueur
 
 
-        # Message par défut
+        # Message par défaut
         self._defaultMsg = title
         self._callbackID = None
 
         self.fenetre = Tk.Tk()
         self.fenetre.title(title)
         
+        # Tableau des monstres
+        self.tkMonsterBoard = None
+        self.tkMonsterBoardId = None
 
     def construitInterface(self):
         """
@@ -63,10 +66,13 @@ class CtxGfx():
         # Création du context graphique
         self.can = Tk.Canvas(self.fenetre, width=w, height=h, bd=0, bg='black')
         
-        # Création de la boite de message
+        
         x = (w - 240) // 2
-        #print("construitInterface",x, w, h)
-        self.msg_cadre = self.cInfo.create_rectangle(w - 2*x, 41, w-240, 80, fill='#00007F', width=2, outline='#FFFFFF')
+        # Création de la liste des monstres
+        self.monster_cadre = self.cInfo.create_rectangle(w - 2*x, 0, w-240, 40, fill='#4F0000', width=1, outline='#FFFFFF')
+        
+        # Création de la boite de message
+        self.msg_cadre = self.cInfo.create_rectangle(w - 2*x, 41, w-240, 80, fill='#00007F', width=1, outline='#FFFFFF')
         
         self.cInfoMsg = self.cInfo.create_text(w // 2, 60, width=w-240, fill='white', 
                              text=self._defaultMsg, justify=Tk.LEFT, font=('Courrier', 20,))
@@ -135,10 +141,43 @@ class CtxGfx():
     # **************************************************************************
     
     def doMonsterStatus(self, MonsterList):
+        """
+        Fonction assurant l'affichage de l'état des monstres
+        """
         
-        pass
+        # Si pas de changement exit direct
+        if not(MonsterList.hasUpdate): return None
         
+        print("CtxGfx::doMonsterStatus >> Doing")
+        MonsterList.hasUpdate = False
+        
+        w = self.nx*self.rx
+        
+        nb_total = len(MonsterList.ActiveMonsterList) + len(MonsterList.InActiveMonsterList)
+        
+        w_monster = nb_total * (self.rx + 2)
+        
+        x_offset = (self.nx*self.rx - w_monster) // 2
+        
+        # Création du tableau des monstres
+        
+        monsterBoard = Image.new('RGBA',(w_monster, 40), (0,0,255,0)) 
+                
+        k = 0
+        for m in MonsterList.ActiveMonsterList:            
+            monsterBoard.paste(m.Sprite,(k*(self.rx + 2), 4))
+            k = k+1
     
+        for m in MonsterList.InActiveMonsterList:
+            tmpSprite = ImageEnhance.Color(m.Sprite)
+            monsterBoard.paste(tmpSprite.enhance(0.0),(k*(self.rx + 2), 4))
+            k = k+1
+          
+        self.cInfo.delete(self.tkMonsterBoard) 
+        self.cInfo.delete(self.tkMonsterBoardId) 
+        self.tkMonsterBoard = ImageTk.PhotoImage(image=monsterBoard,  master=self.cInfo)
+        self.tkMonsterBoardId = self.cInfo.create_image(x_offset, 0, anchor=Tk.NW, image=self.tkMonsterBoard, state= Tk.NORMAL)
+        
     
     
 # *****************************************************************************
@@ -169,7 +208,8 @@ class GfxPlayer(Player):
         Player.__init__(self,initPv)
 
         # Contient le sprite du joueur
-        self.Sprite = Tk.PhotoImage(file=spriteFile, master=self._ctxGfx.fenetre)
+        # self.Sprite = Tk.PhotoImage(file=spriteFile, master=self._ctxGfx.fenetre)
+        self.Sprite = Image.open(spriteFile)
         self._img = None
 
         # Déclanche l'affichage
@@ -205,9 +245,10 @@ class GfxPlayer(Player):
         if not self._hasChanged:
             return None
 
-        if self._img is None:
+        if self._img is None:            
+            self.tkSprite = ImageTk.PhotoImage(image=self.Sprite, master=self._ctxGfx.can)
             self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
-                                                      image=self.Sprite, tag='sprite')
+                                                      image=self.tkSprite, tag='sprite')
         else:
             self._ctxGfx.can.coords(self._img, self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry)
             self._ctxGfx.can.tag_raise(self._img) 
@@ -244,7 +285,7 @@ class GfxMonster(Monster):
         Monster.__init__(self,speed,initPv)
 
         # Contient le sprite du joueur
-        self.Sprite = Tk.PhotoImage(file=spriteFile, master=self._ctxGfx.fenetre)
+        self.Sprite = Image.open(spriteFile)
         self._img = None
 
         # Déclanche l'affichage
@@ -267,12 +308,13 @@ class GfxMonster(Monster):
             return None
 
         if self._img is None:
-            if self.isVisible:
+            self.tkSprite = ImageTk.PhotoImage(image=self.Sprite, master=self._ctxGfx.can)
+            if self.isVisible:               
                 self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
-                                                      image=self.Sprite, tag='sprite')
+                                                      image=self.tkSprite, tag='sprite')
             else:
                 self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
-                                                      image=self.Sprite, tag='sprite', state=Tk.HIDDEN)
+                                                      image=self.tkSprite, tag='sprite', state=Tk.HIDDEN)
                             
         else:
             if self.isVisible:
@@ -584,6 +626,8 @@ class GfxRender():
 
         # Mise à jour des positions des monstres
         self._MonsterList.updateMonster(dt)
+        
+        self._ctxGfx.doMonsterStatus(self._MonsterList)
         
         # Appel du callback pour MAj de l'IA...
         try:

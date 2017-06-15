@@ -39,7 +39,7 @@ if __name__ == "__main__":
     J1.moveToInitialPos()
 
     # Ajout du second joueur
-    J2 = LabyGfx.AddUser('Melba', spriteFile='sprite/Hero/hero2.png', pv=500)
+    J2 = LabyGfx.AddUser('Melba', spriteFile='sprite/Hero/hero3.png', pv=500)
     # Affectation des touches
     J2.bindKey({"N": "z", "S": "s", "O": "q", "E": "d"})    
     J2.moveToInitialPos()
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     M.moveToInitialPos()
     
     # Ajout d'un monstre
-    M = LabyGfx.AddMonster('AHRRR3', speed=0.2, spriteFile="sprite/Hero/monster03.png", pv=1000)
+    M = LabyGfx.AddMonster('AHRRR3', speed=0.2, spriteFile="sprite/Hero/flammiche.png", pv=1000)
     M.engine = MonsterEngine.MME_Foward
     #M.setInitialPos(15,15)
     M.moveToInitialPos()
