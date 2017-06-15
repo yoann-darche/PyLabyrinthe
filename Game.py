@@ -21,7 +21,7 @@ if __name__ == "__main__":
     print("1/ Création du Labyrinthe ....")
     #MonLaby = Laby.LabyText()
     MonLaby = Laby.LabyText()
-    MonLaby.loadJSON('./maps/Default.json')
+    MonLaby.loadJSON('./maps/FindTheWay.json')
     #MonLaby.setDefault()
     
     # Création de la liste des monstres
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     LabyGfx = Gfx.GfxRender(MonLaby,MonsterMgr)
 
     # Ajout du premier joueur
-    J1 = LabyGfx.AddUser('John', pv=200)
+    J1 = LabyGfx.AddUser('John', pv=500)
     # Affectation des touches
     J1.bindKey({"N": "<Up>", "S": "<Down>", "O": "<Left>", "E": "<Right>"})
     # Positionnement du joueur

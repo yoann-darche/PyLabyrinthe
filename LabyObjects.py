@@ -339,7 +339,10 @@ class Laby():
         else:
             self.getSponePos(ObjEntity,rayon+1)
             
-            
+    
+    # **************************************************************************
+    # * Gestion du Shadow                                                      *
+    # **************************************************************************
        
     def updateLight(self, x,y):
         
@@ -415,7 +418,15 @@ class Laby():
             
                 self.Carte[pos] = self.Carte[pos] | code
     
-    
+    def blackOut(self):
+        
+        for p in range(0,len(self.Carte)):
+            self.Carte[p] = self.Carte[p] & 0x0F
+            
+    def showAll(self):
+        
+        for p in range(0,len(self.Carte)):
+            self.Carte[p] = self.Carte[p] | 0xF0
     
     # **************************************************************************
     # ** Gestion des effets dynamiques                                        **

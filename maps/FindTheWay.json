@@ -1,0 +1,76 @@
+{
+    "NomLaby"           : "Trouve ton chemin",
+    "Theme"             : "RuineDeTerre",    
+    "IsShadowEnabled"   : true,
+    "PlayerSponeCode"   : "@",
+    "MonsterSponeCode"  : "#",
+    "Carte"   : [
+            "+--------------+---+--------+----------+",
+            "|              |            <          |",
+            "|   @ @  +---+ + +--------+ |  +-----+ |",
+            "|            |   |        | |  S    T| |",
+            "|   @ @  Z Z | + +  +---+ | +--------+ |",
+            "|        Z Z | +-+--+     |            |",
+            "| ZZ ZZZZZ Z |        ----+ + ZZZZZ ZZZ|",
+            "|  Z Z   Z Z +------+       | Z     Z  |",
+            "|Z Z Z Z Z Z        +-------+ZZ Z Z Z  |",
+            "|  Z   Z   Z ZZZZZZ      Z    Z Z Z    |",
+            "| ZZZZZZ Z Z      Z ZZ Z   ZZBZ Z ZZZZZ|",
+            "| Z    Z Z ZZZZZZ Z ZZ ZZZZZ  Z Z      |",
+            "| Z ZZ Z Z  Z   Z      Z     ZZ +------+",
+            "|    Z Z ZZ   Z Z ZZZZZZ ZsZ Z  |     p|",
+            "| Z  Z Z  ZZZZZ   Z      +------+T+----+",
+            "| ZZ Z Z      Z Z ZZZZZZZ|      | |qA  |",
+            "| Z  Z ZZZZZZ Z ZZZ      | +---P+_---+ |",
+            "| Z ZZ      Z Z_ZT  ZZ Z | |u       u| |",
+            "| Z Zs ZZZZ Z Z ZZZZZZ Z | > #     # < |",
+            "| ZZZZ    | Z Z    < ZZZ | |         | |",
+            "|BZ     Z | Z Z Z  Z     | | #  u  # | |",
+            "| ZZZZZZZ | ZZZ +------^-+ +--U------+ |",
+            "|         |           <A Q             |",
+            "+----+----+--------------+-------------+"
+    ],
+    "FXList"    : [
+        { "MapCode"     : "T", 
+          "FXHandler"   : "LabyTextFxTunnel.LTFxTunnel"},
+        
+        { "MapCode"     : "A", 
+          "FXHandler"   : "LabyTextFxAspirateur.LTFxAspirateur"},
+          
+        { "MapCode"     : "^", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "N" } },
+        { "MapCode"     : "_", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "S" } },
+        { "MapCode"     : "<", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "O" } },
+        { "MapCode"     : ">", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "E" } },
+
+          
+        { "MapCode"     : "P", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte"},
+
+        { "MapCode"     : "Q", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 8} },
+          
+        { "MapCode"     : "R", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 4} },
+        
+        { "MapCode"     : "S", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt"},
+        { "MapCode"     : "U", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt",
+          "FXOptions"   : { "closeTime" : 4} },
+		  
+		{ "MapCode"     : "B", 
+          "FXHandler"   : "LabyTextFxBlackOut.LTFxBlackOut"} 
+		  
+        ]
+ 
+}

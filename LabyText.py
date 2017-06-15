@@ -17,6 +17,7 @@ import LabyTextFxAspirateur
 import LabyTextFxPorte
 import LabyTextFxPorteEt
 import LabyTextFxSensUnique
+import LabyTextFxBlackOut
 
 class LabyText(LabyObjects.Laby):
     
@@ -66,25 +67,25 @@ class LabyText(LabyObjects.Laby):
         # Vérifie les cases à proximité
         if x > 0: 
             c = self.CarteTxt[y][x-1]
-            if ((c in ('|', '-', '+')) or \
+            if ((c in ('|', '-', '+', 'Z')) or \
                 ( (self.CarteFX[y][x-1] is not None) and self.FXList[c.upper()].gfxLinkFx(c) )):
                 code = code | 0x04
             
         if x < self.LX-1:
             c = self.CarteTxt[y][x+1] 
-            if ((c in ('|', '-', '+')) or \
+            if ((c in ('|', '-', '+', 'Z')) or \
                 ((self.CarteFX[y][x+1] is not None) and self.FXList[c.upper()].gfxLinkFx(c))):
                 code = code | 0x01
             
         if y > 0: 
             c = self.CarteTxt[y-1][x]
-            if ((c in ('|', '-', '+')) or \
+            if ((c in ('|', '-', '+', 'Z')) or \
                 ((self.CarteFX[y-1][x] is not None) and self.FXList[c.upper()].gfxLinkFx(c))):
                 code = code | 0x02
             
         if y < self.LY-1:
             c = self.CarteTxt[y+1][x]
-            if ((c in ('|', '-', '+')) or \
+            if ((c in ('|', '-', '+', 'Z')) or \
                 ((self.CarteFX[y+1][x] is not None) and self.FXList[c.upper()].gfxLinkFx(c))):
                 code = code | 0x08
                 
@@ -172,7 +173,7 @@ class LabyText(LabyObjects.Laby):
                     self.PlayerSponePlace.add((lx,ly))
                 elif car == self.MonsterSponeCode:
                     self.MonsterSponePlace.add((lx,ly))
-                elif car not in ('|', '-', '+'):
+                elif car not in ('|', '-', '+', 'Z'):
                     self.Carte[ly*self.LX + lx] = 0
                 else:
                     # Vérifie les cases à proximité
@@ -221,6 +222,12 @@ class LabyText(LabyObjects.Laby):
                     self._registerFx(LabyTextFxPorteEt.LTFxPorteEt(),mapCode)
                 else:
                     self._registerFx(LabyTextFxPorteEt.LTFxPorteEt(**options),mapCode)
+                    
+            elif fxObject == "LabyTextFxBlackOut.LTFxBlackOut":
+                if options is None:
+                    self._registerFx(LabyTextFxBlackOut.LTFxBlackOut(),mapCode)
+                else:
+                    self._registerFx(LabyTextFxBlackOut.LTFxBlackOut(**options),mapCode)
                 
         
 
