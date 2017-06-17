@@ -1,0 +1,79 @@
+{
+    "NomLaby"           : "P H A S O R",
+    "Theme"             : "Blue",    
+    "IsShadowEnabled"   : false,
+    "PlayerSponeCode"   : "@",
+    "MonsterSponeCode"  : "#",
+    "Carte"   : [
+            "+--------------------------------------+",
+			"|s                                    s|",
+            "|                 ZZZ                  |",
+            "|  @              ZAZ                  |",
+            "|                 Z^Z                  |",
+            "|    q           ZZ ZZ            u    |",
+            "|             ZZZZZQZZZZZ              |",
+            "|             Z     Z  rZ              |",
+            "|             Z ZZZUZ ZZZ              |",
+            "|             Z_Z       Z              |",
+            "|             Z   Z^ZZZ S              |",
+            "|             Z   Z^ZrZ Z              |",
+            "|             ZZZ_Z < Z Z              |",
+            "|             Z Z Z Z Z Z              |",
+            "|             Z   < Z Z Z              |",
+            "|             ZZZ Z^ZTZ Z              |",
+            "|             Z   Z^ZZZ Z              |",
+            "|             R  ZZPZZ  Z              |",
+            "|             ZZ_Z   Z_ZZ              |",
+            "|    u       ZZZ  # #  ZZZ        p    |",
+            "|           ZZZ         ZZZ            |",
+            "|           ZZ   #   #   ZZ         @  |",
+            "|            ZZZZZZZZZZZZZ             |",
+            "|s                 T                  s|",
+            "+--------------------------------------+"
+    ],
+    "FXList"    : [
+        { "MapCode"     : "T", 
+          "FXHandler"   : "LabyTextFxTunnel.LTFxTunnel"},
+        
+        { "MapCode"     : "A", 
+          "FXHandler"   : "LabyTextFxAspirateur.LTFxAspirateur"},
+          
+        { "MapCode"     : "^", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "N" } },
+        { "MapCode"     : "_", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "S" } },
+        { "MapCode"     : "<", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "O" } },
+        { "MapCode"     : ">", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "E" } },
+
+          
+        { "MapCode"     : "P", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 4} },
+
+        { "MapCode"     : "Q", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 8} },
+          
+        { "MapCode"     : "R", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 2} },
+        
+        { "MapCode"     : "S", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt",
+          "FXOptions"   : { "closeTime" : 2} },
+        { "MapCode"     : "U", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt",
+          "FXOptions"   : { "closeTime" : 4} },
+		  
+		{ "MapCode"     : "B", 
+          "FXHandler"   : "LabyTextFxBlackOut.LTFxBlackOut"} 
+		  
+        ]
+ 
+}

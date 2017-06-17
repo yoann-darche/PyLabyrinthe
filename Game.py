@@ -21,7 +21,7 @@ if __name__ == "__main__":
     print("1/ Création du Labyrinthe ....")
     #MonLaby = Laby.LabyText()
     MonLaby = Laby.LabyText()
-    MonLaby.loadJSON('./maps/FindTheWay.json')
+    MonLaby.loadJSON('./maps/Phasor.json')
     #MonLaby.setDefault()
     
     # Création de la liste des monstres
