@@ -1,0 +1,78 @@
+{
+    "NomLaby"           : "Learning Adventure",
+    "Theme"             : "Blue",    
+    "IsShadowEnabled"   : false,
+    "PlayerSponeCode"   : "@",
+    "MonsterSponeCode"  : "#",
+    "Carte"   : [
+            "+--------------------------------------+",
+            "|ZZZZ@ZZZZZZZZZZZZZZZZZZZZZZqZZZZZZZZZZ|",
+            "|Z  >           TZ ZT  p P    Q       Z|",
+            "|Z ZZZZZZZZZZZZZZZ ZZZZZZZZZqZZZZZZZZ Z|",
+            "|Z Z@           UZ ZUZZZZZZZZZ     rZrZ|",
+            "|Z ZZ^ZZZZZZZZZZZZ Z ZZZZZdZZZ ZZZZ Z Z|",
+            "|Z ZZ              Z c  C   D  ZZ Z Z Z|",
+            "|Z ZZZZZZZZZZZZZ ZZZZZZZZZdZZZZZ ZZ Z Z|",
+            "|Z Z    ZAZ    Z ZZ  ZZ  ZZZ ZZ  ZZ Z Z|",
+            "|Z Z    Z Z    Z Z ZZ  ZZ  ZZ  ZZ Z Z Z|",
+            "|Z Z  ZZZEZZZ  Z Z ZZ  ZZ  ZZ  ZZ Z Z Z|",
+            "|Z Z ZZ     ZZ Z ZZ  ZZ  ZZ  ZZ  ZZ Z Z|",
+            "|Z Z Z   #   Z Z ZZ  ZZ  ZZ  ZZ  ZZ Z Z|",
+            "|Z Z ZZZ^Z^ZZZ Z Z ZZ  ZZ  ZZ  ZZ Z Z Z|",
+            "|Z Z ZZ     ZZ Z Z ZZ  ZZ  ZZ  ZZ Z Z Z|",			
+            "|Z ZZZZZEZEZZZZZ ZZ  ZZ  ZZ  ZZ  ZZ Z Z|",
+            "|Z     <   >     ZZ  ZZ  ZZ  ZZ  ZZ Z Z|",
+            "|ZZZZZZZ^Z^ZZZZZZZ ZZ  ZZ  ZZ  ZZ Z Z Z|",
+            "|ZZZZZZZeZeZZ  ZZ  ZZ  ZZ  ZZ  ZZ Z Z Z|",
+            "|ZZZZZZZ^Z^Z ZZ  ZZ  ZZ  ZZ  ZZ  ZZ Z Z|",            
+            "|ZZZZZZZ Z ZZZZZZZZZZZZZZZZZZZZZZZZRZRZ|",            
+            "|ZZZZZZZ                              Z|",
+            "|ZZZZZZZ                              Z|",
+            "|ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ|",
+            "+--------------------------------------+"
+    ],
+    "FXList"    : [
+        { "MapCode"     : "T", 
+          "FXHandler"   : "LabyTextFxTunnel.LTFxTunnel"},
+		{ "MapCode"     : "U", 
+          "FXHandler"   : "LabyTextFxTunnel.LTFxTunnel"},
+        
+        { "MapCode"     : "A", 
+          "FXHandler"   : "LabyTextFxAspirateur.LTFxAspirateur"},
+          
+        { "MapCode"     : "^", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "N" } },
+        { "MapCode"     : "_", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "S" } },
+        { "MapCode"     : "<", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "O" } },
+        { "MapCode"     : ">", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "E" } },
+
+          
+        { "MapCode"     : "P", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte"},
+
+        { "MapCode"     : "Q", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt" },
+          
+        { "MapCode"     : "R", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 7} },
+		
+		{ "MapCode"     : "C", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte"},
+
+        { "MapCode"     : "D", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt" },	
+
+		{ "MapCode"     : "E", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt" }
+		  
+        ]
+ 
+}
