@@ -1,13 +1,13 @@
 {
     "NomLaby"           : "Learning Adventure",
-    "Theme"             : "Blue",    
-    "IsShadowEnabled"   : false,
+    "Theme"             : "Gray",    
+    "IsShadowEnabled"   : true,
     "PlayerSponeCode"   : "@",
     "MonsterSponeCode"  : "#",
     "Carte"   : [
             "+--------------------------------------+",
             "|ZZZZ@ZZZZZZZZZZZZZZZZZZZZZZqZZZZZZZZZZ|",
-            "|Z  >           TZ ZT  p P    Q       Z|",
+            "|Z  >           TZLZT  p P    Q       Z|",
             "|Z ZZZZZZZZZZZZZZZ ZZZZZZZZZqZZZZZZZZ Z|",
             "|Z Z@           UZ ZUZZZZZZZZZ     rZrZ|",
             "|Z ZZ^ZZZZZZZZZZZZ Z ZZZZZdZZZ ZZZZ Z Z|",
@@ -36,6 +36,9 @@
           "FXHandler"   : "LabyTextFxTunnel.LTFxTunnel"},
 		{ "MapCode"     : "U", 
           "FXHandler"   : "LabyTextFxTunnel.LTFxTunnel"},
+		{ "MapCode"     : "L", 
+          "FXHandler"   : "LabyTextFxLightOn.LTFxLightOn",
+          "FXOptions"   : { "delais" : 3} },
         
         { "MapCode"     : "A", 
           "FXHandler"   : "LabyTextFxAspirateur.LTFxAspirateur"},

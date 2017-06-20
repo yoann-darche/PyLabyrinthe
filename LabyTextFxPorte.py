@@ -2,6 +2,8 @@
 
 import random
 import LabyTextFx
+import SpriteIndex
+
 
 
 __author__ = 'Yoann'
@@ -113,13 +115,13 @@ class LTFxPorte(LabyTextFx.LabyTextFx):
         if self._hasChanged:
             
             if(self.PorteOuverte): 
-                trigId = 5
-                doorH = 3
-                doorV = 7
+                trigId = SpriteIndex.SPRITE_BOUTON_ROND_VERT
+                doorH = SpriteIndex.SPRITE_V_PORTE_OUVERTE
+                doorV = SpriteIndex.SPRITE_H_PORTE_OUVERTE
             else: 
-                trigId = 4
-                doorH = 2
-                doorV = 6
+                trigId = SpriteIndex.SPRITE_BOUTON_ROND_ROUGE
+                doorH = SpriteIndex.SPRITE_V_PORTE_FERME
+                doorV = SpriteIndex.SPRITE_H_PORTE_FERME
             
             
             for (x,y) in self.TrigSet:                

@@ -18,6 +18,7 @@ import LabyTextFxPorte
 import LabyTextFxPorteEt
 import LabyTextFxSensUnique
 import LabyTextFxBlackOut
+import LabyTextFxLightOn
 
 class LabyText(LabyObjects.Laby):
     
@@ -229,6 +230,11 @@ class LabyText(LabyObjects.Laby):
                 else:
                     self._registerFx(LabyTextFxBlackOut.LTFxBlackOut(**options),mapCode)
                 
+            elif fxObject == "LabyTextFxLightOn.LTFxLightOn":
+                if options is None:
+                    self._registerFx(LabyTextFxLightOn.LTFxLightOn(),mapCode)
+                else:
+                    self._registerFx(LabyTextFxLightOn.LTFxLightOn(**options),mapCode)
         
 
 ###

@@ -3,6 +3,8 @@
 import random
 import LabyTextFx
 
+import SpriteIndex
+
 
 __author__ = 'Yoann'
 
@@ -76,13 +78,13 @@ class LTFxSensUnique(LabyTextFx.LabyTextFx):
         if self._hasChanged:
             
             if self.dir == 'N': 
-                tileId = 8
+                tileId = SpriteIndex.SPRITE_SENSU_N
             elif self.dir == 'O': 
-                tileId = 9
+                tileId = SpriteIndex.SPRITE_SENSU_O
             elif self.dir == 'S': 
-                tileId = 10
+                tileId = SpriteIndex.SPRITE_SENSU_S
             elif self.dir == 'E': 
-                tileId = 11
+                tileId = SpriteIndex.SPRITE_SENSU_E
                         
             for (x,y) in self.FxSet:                
                 ObjGfx.addFxTile(x,y,tileId)

@@ -1,27 +1,31 @@
 # -*- coding: utf-8 -*-
 
-import random
 import LabyTextFx
 import Entity
+
 import SpriteIndex
 
 
 __author__ = 'Yoann'
 
 """
-    Ce package contient la définition de l'aspirateur à Monstre
+    Ce package contient la définition de l'effet LightOn
+    Cela permet d'afficher tout le labyrinthe (en option avec un temps limite)
     
 """
 
 
-class LTFxAspirateur(LabyTextFx.LabyTextFx):
+class LTFxLightOn(LabyTextFx.LabyTextFx):
     
 
+    def __init__(self, delais=0):
+        self.delay = delais # delais avant fermeture
+        
     def initFx(self, ObjLabyTxt, code):        
         
         LabyTextFx.LabyTextFx.initFx(self,ObjLabyTxt, code)
         
-        self.AspirSet = set() # Set des aspirateur
+        self.LigthOnSet = set() # Set des aspirateur
         
         # Scan pour le caractère dans le labyrinthe
         
@@ -35,9 +39,12 @@ class LTFxAspirateur(LabyTextFx.LabyTextFx):
                     
                     # Ajout du callBack
                     ObjLabyTxt._registerFxCb(self.checkFX, lx, ly)
-                    self.AspirSet.add((lx,ly))
+                    self.LigthOnSet.add((lx,ly))
                     
+        self.cumul = -1
+        
         self._hasChanged = True
+        print("LTFxLightOn::initFx done, nb trigger =", len(self.LigthOnSet))
                             
         return True
         
@@ -46,23 +53,29 @@ class LTFxAspirateur(LabyTextFx.LabyTextFx):
         if type=='check': return True
         
         # Vérification de l'ordre et du type de l'entité
-        if ((type!='apply') or (not isinstance(ObjEntity,Entity.Monster))) : 
+        if ((type!='apply') or isinstance(ObjEntity,Entity.Monster)) : 
             return (x,y)
         
-        ObjEntity.kill()
-        self._Map.pushMessage("Yes ! un monstre de moins....",3)
-        self._Map.pushMessage("Bye Bye " + ObjEntity.Name,3)
+        print("LTFxLightOn::checkFX : Allume le labyrinthe")
+        
+        self._Map.showAll()   
+
+        if self.delay > 0: self.cumul = 0     
                 
-        return (-1,-1)
+        return (x,y)
         
         
     def renderFx(self, ObjGfx, dt):
-        
-        if self._hasChanged:
-            for (x,y) in self.AspirSet:
-                ObjGfx.addFxTile(x,y,SpriteIndex.SPRITE_ASPIRATEUR)
                 
-            self._hasChanged = False
+        if self.delay > 0 and self.cumul >= 0:
+            self.cumul += dt
+            if self.cumul > self.delay:
+                self._Map.blackOut()
+                self.cumul = -1
+        
+        if self._hasChanged :
+            for (x,y) in self.LigthOnSet: 
+                ObjGfx.addFxTile(x,y,SpriteIndex.SPRITE_LIGTHON)
         
         return True        
         

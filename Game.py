@@ -54,7 +54,7 @@ if __name__ == "__main__":
     M.moveToInitialPos()
     
     # Ajout d'un monstre
-    M = LabyGfx.AddMonster('AHRRR2', speed=0.3, spriteFile="sprite/Hero/monster02.png", pv=500)
+    M = LabyGfx.AddMonster('AHRRR2', speed=0.3, spriteFile="sprite/Hero/monster04.png", pv=500)
     M.engine = MonsterEngine.MME_Standard
     #M.setInitialPos(15,17)
     M.moveToInitialPos()

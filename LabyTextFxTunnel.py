@@ -2,6 +2,7 @@
 
 import random
 import LabyTextFx
+import SpriteIndex
 
 
 __author__ = 'Yoann'
@@ -64,7 +65,7 @@ class LTFxTunnel(LabyTextFx.LabyTextFx):
         
         if self._hasChanged:
             for (x,y) in self.ExchangeSet:
-                ObjGfx.addFxTile(x,y,0)
+                ObjGfx.addFxTile(x,y,SpriteIndex.SPRITE_TELEPORTEUR)
             self._hasChanged = False
         
         return True        
