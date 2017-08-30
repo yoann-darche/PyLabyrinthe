@@ -132,7 +132,7 @@ class LabyText(LabyObjects.Laby):
         """
         
         # Réinitialise le labyrinthe
-        self.reinit()
+        self.reInit()
         
         f = open(fileName, "r", encoding="utf8")
         

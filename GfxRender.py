@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from PIL import Image, ImageDraw, ImageTk, ImageEnhance
 import tkinter as Tk
-import tkinter.ttk as ttk
+from PIL import Image, ImageDraw, ImageTk, ImageEnhance
 import os
 
 import time
@@ -12,173 +11,7 @@ from Entity import Player, Monster
 
 __author__ = 'Yoann'
 
-# *****************************************************************************
-# ** Classe du context Graphique, cette classe assure la création de la      **
-# ** fenêtre graphique, et la gestion de ces propriétés et dimension.        **
-# *****************************************************************************
 
-class CtxGfx():
-
-
-    def __init__(self, title='Le labyrinthe oufff & Connceté! - V0.60'):
-
-
-        # taille des cases du labyrinthe x/y en pixel
-        self.rx = 32
-        self.ry = 32
-        # Nb case
-        self.nx = 20
-        self.ny = 20
-        
-        # Objets graphiques        
-        self.can = None
-        
-        # Objets Widget
-        self.playerLKP = None        # Liste Déroulante pour les joueurs
-        self.selectedPlayer = None   # Variable contenant le joueur sélectioné        
-        self.playerPV = None         # Zone text pour afficher les info d'un joueur
-
-
-        # Message par défaut
-        self._defaultMsg = title
-        self._callbackID = None
-
-        self.fenetre = Tk.Tk()
-        self.fenetre.title(title)
-        
-        # Tableau des monstres
-        self.tkMonsterBoard = None
-        self.tkMonsterBoardId = None
-
-    def construitInterface(self):
-        """
-        Cette fonction se charge de la construction de l'interface
-        :return:
-        """
-
-        w = self.nx*self.rx
-        h = self.ny*self.ry
-        
-        # Création de la barre des infos
-        self.cInfo = Tk.Canvas(self.fenetre, width=w, height=80, bd=0, bg='black')        
-        self.cInfo.pack()
-        
-        # Création du context graphique
-        self.can = Tk.Canvas(self.fenetre, width=w, height=h, bd=0, bg='black')
-        
-        
-        x = (w - 240) // 2
-        # Création de la liste des monstres
-        self.monster_cadre = self.cInfo.create_rectangle(w - 2*x, 0, w-240, 40, fill='#4F0000', width=1, outline='#FFFFFF')
-        
-        # Création de la boite de message
-        self.msg_cadre = self.cInfo.create_rectangle(w - 2*x, 41, w-240, 80, fill='#00007F', width=1, outline='#FFFFFF')
-        
-        self.cInfoMsg = self.cInfo.create_text(w // 2, 60, width=w-240, fill='white', 
-                             text=self._defaultMsg, justify=Tk.LEFT, font=('Courrier', 20,))
-      
-
-        # création du context graphique
-        #self.can = Canvas(self.fenetre, width=600, height=600)
-        self.can.pack()
-
-    def addGUIPlayer(self, playerName):
-        self.playerLKP['values'] = list(self.playerLKP['values']) + [playerName]
-
-
-    # **************************************************************************
-    # **  Fonctions de gestion de l'affichage des messages.                   **
-    # **************************************************************************
-        
-    def setDefaultMsg(self, msg):
-        
-        self._defaultMsg = msg
-        
-        
-    def showMessage(self, message, time=5):
-        """
-        Cette fonction assure l'affichage du message pendant time ms
-        """                
-        
-        # Affiche le cadre des message        
-        self.cInfo.itemconfig(self.cInfoMsg, text=message)     
-        print("MSG: ",message)   
-        self.msgTimeToLive = time
-        
-
-        
-    def clearMessage(self):
-        
-        """
-        Fonction appelée après n ms pour effacer le message
-        """
-        
-        # Affiche le cadre des message        
-        self.cInfo.itemconfig(self.cInfoMsg, text=self._defaultMsg)
-        self.msgTimeToLive = -1
-    
-    def doUpdate(self,dt, LabyObj):
-        """
-        Fonction assurant la mise à jour de l'interface
-        """        
-        
-        # Gestion des messages
-        if self.msgTimeToLive > 0:
-            self.msgTimeToLive -= dt
-            if self.msgTimeToLive <= 0:
-                if LabyObj.countMessage() == 0:
-                    self.clearMessage()
-            elif (self.msgTimeToLive > 2) and (LabyObj.countMessage() > 0):
-                self.msgTimeToLive = 2
-        else:
-            (m,t) = LabyObj.popMessage()
-            if m is not None:
-                self.showMessage(m,t)
-                
-                
-    # **************************************************************************
-    # **  Fonctions de gestion de l'affichage des montres.                    **
-    # **************************************************************************
-    
-    def doMonsterStatus(self, MonsterList):
-        """
-        Fonction assurant l'affichage de l'état des monstres
-        """
-        
-        # Si pas de changement exit direct
-        if not(MonsterList.hasUpdate): return None
-        
-        print("CtxGfx::doMonsterStatus >> Doing")
-        MonsterList.hasUpdate = False
-        
-        w = self.nx*self.rx
-        
-        nb_total = len(MonsterList.ActiveMonsterList) + len(MonsterList.InActiveMonsterList)
-        
-        w_monster = nb_total * (self.rx + 2)
-        
-        x_offset = (self.nx*self.rx - w_monster) // 2
-        
-        # Création du tableau des monstres
-        
-        monsterBoard = Image.new('RGBA',(w_monster, 40), (0,0,255,0)) 
-                
-        k = 0
-        for m in MonsterList.ActiveMonsterList:            
-            monsterBoard.paste(m.Sprite,(k*(self.rx + 2), 4))
-            k = k+1
-    
-        for m in MonsterList.InActiveMonsterList:
-            tmpSprite = ImageEnhance.Color(m.Sprite)
-            monsterBoard.paste(tmpSprite.enhance(0.0),(k*(self.rx + 2), 4))
-            k = k+1
-          
-        self.cInfo.delete(self.tkMonsterBoard) 
-        self.cInfo.delete(self.tkMonsterBoardId) 
-        self.tkMonsterBoard = ImageTk.PhotoImage(image=monsterBoard,  master=self.cInfo)
-        self.tkMonsterBoardId = self.cInfo.create_image(x_offset, 0, anchor=Tk.NW, image=self.tkMonsterBoard, state= Tk.NORMAL)
-        
-    
     
 # *****************************************************************************
 # ** Classe dérivant du Player pour introduire les spécificité de l'affichage**
@@ -350,17 +183,19 @@ class GfxMonster(Monster):
 # **************************************************************************
 class GfxRender():
 
-    def __init__(self, laby, monsterList):
+    def __init__(self, laby, entityList, CtxGfx):
         
          
         # Initialisation du callback de mise à jour des IA
         self._OnUpdateCbk = None
         
         # Initialisation des variables locales
+        self.lastTheme    = None    # theme du Labyrinthe chargé
         self.photo_wall_list = []   # Liste des images de mur
         self.photo_asset_list= []   # Liste des images d'objet
         self.photo_shadow_list=[]   # Liste des ombres
         self.photo_error = None     # Image Erreur
+        self.photo_back  = None     # Image de fond
 
         self.plateau     = None     # Pillow image pour traitement rapide
         self.mapFx       = None
@@ -369,14 +204,8 @@ class GfxRender():
 
         # Mémorisation de la référence sur l'objet de type Laby
         self._Map = laby
-        self._MonsterList = monsterList
-
-        # Création du context Graphique
-        self._ctxGfx = CtxGfx()
-        self._ctxGfx.nx = self._Map.LX
-        self._ctxGfx.ny = self._Map.LY
-        self._ctxGfx.construitInterface()
-
+        self._EntityList = entityList
+        self._ctxGfx = CtxGfx
 
         # Initialisation des ressources grafiques
         self._initGfx()
@@ -385,36 +214,73 @@ class GfxRender():
         # point référence temps
         self._lastTime  = time.time()
         
+        # Call Back
+        self.OnMapEnd = None
+        
+        
+    def reInit(self):
+        """
+        Fonction utilisée lors du rechargement d'un Labyrinthe
+        """
+        
+        # Mise à jour de la taille du Labyrinthe
+        self._ctxGfx.nx = self._Map.LX
+        self._ctxGfx.ny = self._Map.LY
+        
+        # Initialisation des ressources grafiques
+        self._initGfx()        
+
+        # point référence temps
+        self._lastTime  = time.time()
+        
+        # Association de la call back Graphique
+        self._ctxGfx.fenetre.after(1000, self.onUpdate)
 
     def _initGfx(self):
+        """
+        Recharge les ressource graphique associé au theme du Labyrinthe
+        """
         
-        self.photo_error = Image.open("sprite/Std/ErrorTile.png")
-        self.photo_back  = Image.open("sprite/"+self._Map.Theme +"/background.png")
+        if self.photo_error is None:
+            self.photo_error = Image.open("sprite/Std/ErrorTile.png")
+            
+        if self.photo_back is None:
+            self.photo_back  = Image.open("sprite/"+self._Map.Theme +"/background.png")
         
-        # Extraction des images mur
-        photo_set = Image.open("sprite/"+self._Map.Theme +"/walls.png")
-        for i in range(0,16) :
-            img = photo_set.crop((i*self._ctxGfx.rx, 0, (i+1)*self._ctxGfx.rx, self._ctxGfx.ry))
-            img.load()
-            self.photo_wall_list.append(img)
+        
+        if (self.lastTheme is None) or (self.lastTheme !=  self._Map.Theme):
+        
+            # Vide les liste actuelle
+            self.photo_wall_list.clear()
+            self.photo_asset_list.clear()
+            self.photo_shadow_list.clear()
+                    
+            # Extraction des images mur
+            photo_set = Image.open("sprite/"+self._Map.Theme +"/walls.png")
+            for i in range(0,16) :
+                img = photo_set.crop((i*self._ctxGfx.rx, 0, (i+1)*self._ctxGfx.rx, self._ctxGfx.ry))
+                img.load()
+                self.photo_wall_list.append(img)
+                
+                
+            # Extraction des objets
+            photo_set = Image.open("sprite/"+self._Map.Theme +"/assets.png")
+            (w,h) = photo_set.size
+            for i in range(0,w // self._ctxGfx.rx) :
+                img = photo_set.crop((i*self._ctxGfx.rx, 0, (i+1)*self._ctxGfx.rx, self._ctxGfx.ry))
+                img.load()
+                self.photo_asset_list.append(img)     
+                
+            # Extraction des ombres        
+            photo_set = Image.open("sprite/"+self._Map.Theme +"/shadows.png")
+            (w,h) = photo_set.size
+            for i in range(0,w // self._ctxGfx.rx) :
+                img = photo_set.crop((i*self._ctxGfx.rx, 0, (i+1)*self._ctxGfx.rx, self._ctxGfx.ry))
+                img.load()
+                self.photo_shadow_list.append(img)    
+                
+            self.lastTheme = self._Map.Theme
             
-            
-        # Extraction des objets
-        photo_set = Image.open("sprite/"+self._Map.Theme +"/assets.png")
-        (w,h) = photo_set.size
-        for i in range(0,w // self._ctxGfx.rx) :
-            img = photo_set.crop((i*self._ctxGfx.rx, 0, (i+1)*self._ctxGfx.rx, self._ctxGfx.ry))
-            img.load()
-            self.photo_asset_list.append(img)     
-            
-        # Extraction des ombres        
-        photo_set = Image.open("sprite/"+self._Map.Theme +"/shadows.png")
-        (w,h) = photo_set.size
-        for i in range(0,w // self._ctxGfx.rx) :
-            img = photo_set.crop((i*self._ctxGfx.rx, 0, (i+1)*self._ctxGfx.rx, self._ctxGfx.ry))
-            img.load()
-            self.photo_shadow_list.append(img)    
-           
 
     def mainLoop(self):
         
@@ -441,7 +307,7 @@ class GfxRender():
         p.Name = playerName
         
         # Ajout dans la liste des joueurs
-        self._Map.addPlayer(p)            
+        self._EntityList.addPlayer(p)            
 
         return p
         #except e:
@@ -465,7 +331,7 @@ class GfxRender():
             p.Name = monsterName
             
             # Ajout dans la liste des joueurs
-            self._MonsterList.addMonster(p)
+            self._EntityList.addMonster(p)
             
             return p
         except e:
@@ -601,11 +467,11 @@ class GfxRender():
         # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         # Pour chaque perso
-        for p in self._Map.PlayerList:
+        for p in self._EntityList.ActivePlayerList:
             p.render(dt)
             
         # Pour chaque monstre
-        for p in self._MonsterList.ActiveMonsterList:
+        for p in self._EntityList.ActiveMonsterList:
             p.render(dt)
         
 
@@ -625,9 +491,9 @@ class GfxRender():
         self._ctxGfx.doUpdate(dt, self._Map)
 
         # Mise à jour des positions des monstres
-        self._MonsterList.updateMonster(dt)
+        self._EntityList.updateMonster(dt)
         
-        self._ctxGfx.doMonsterStatus(self._MonsterList)
+        self._ctxGfx.doMonsterStatus(self._EntityList)
         
         # Appel du callback pour MAj de l'IA...
         try:
@@ -641,5 +507,13 @@ class GfxRender():
         # Mise à jour de la référence temporelle
         self._lastTime  = cur
 
-        # Association de la call back Graphique
-        self._ctxGfx.fenetre.after(50, self.onUpdate)
+        # Si la map n'est pas finit on continue, sinon on arrête
+        if not self._Map.isFinished :    
+            # Association de la call back Graphique
+            self._ctxGfx.fenetre.after(50, self.onUpdate)
+        else:
+            try:
+                self.OnMapEnd()
+            except:
+                pass
+        

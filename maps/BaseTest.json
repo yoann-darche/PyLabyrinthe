@@ -1,6 +1,6 @@
 {
-    "NomLaby"           : "Minimaliste(Template)",
-    "Theme"             : "RuineDeTerre",    
+    "NomLaby"           : "Map de Test",
+    "Theme"             : "Gauntlet",    
     "IsShadowEnabled"   : false,
     "PlayerSponeCode"   : "@",
     "MonsterSponeCode"  : "#",

@@ -1,7 +1,7 @@
 {
     "NomLaby"           : "PAM PAM PAM",
-    "Theme"             : "Blue",    
-    "IsShadowEnabled"   : true,
+    "Theme"             : "Ranch",    
+    "IsShadowEnabled"   : false,
     "PlayerSponeCode"   : "@",
     "MonsterSponeCode"  : "#",
     "Carte"   : [
@@ -10,7 +10,7 @@
             "|     |            +  T        +     #           |   |",
             "|     ++------+    |                             |   |",
             "|      |      |    +----+_+---+------_-^----+_+--+   |",
-            "+-_----+      |           |                 |        |",
+            "+-_----+      |           Q                 |        |",
             "|             +-----------+                 |     #  |",
             "|                |           +--------+--Q---+--_----+",
             "|                |           |        |              |",
