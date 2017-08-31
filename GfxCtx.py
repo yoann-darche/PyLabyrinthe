@@ -38,7 +38,7 @@ class CtxGfx():
         self.msgTimeToLive = 0
 
         self.fenetre = Tk.Tk()
-        #self.fenetre.attributes('-fullscreen',1)
+        self.fenetre.attributes('-fullscreen',1)
         self.fenetre.title(title)
         
         # Tableau des monstres
@@ -63,7 +63,8 @@ class CtxGfx():
         
         # Création du context graphique pour l'affichage du labyrinthe
         self.can = Tk.Canvas(self.fenetre, width=w, height=h, bd=0, bg='black')
-        self.can.pack(anchor=Tk.CENTER)
+        #self.can.pack(anchor=Tk.CENTER)
+        self.can.pack()
 
         
         
@@ -195,14 +196,14 @@ class CtxGfx():
             
         print("CtxGfx::doEndMapTitle: Début")
         
-        self.TitleRect = self.can.create_rectangle(self.rx*2, 250, w-(self.rx*2), 350, 
-                           fill='#004F00', width=2, outline='#FFFFFF')
+        #self.TitleRect = self.can.create_rectangle(self.rx*2, 250, w-(self.rx*2), 350, 
+        #                   fill='#004F00', width=2, outline='#FFFFFF')
 
         print("CtxGfx::doEndMapTitle: Yo")
 
-        self.TitleMsg  = self.can.create_text( (self.nx*self.rx) // 2, 300, fill='white', 
-                             text='Yeah, tous les monstres ont été maîtrisés',
-                             font=('Courrier', 20))
+        #self.TitleMsg  = self.can.create_text( (self.nx*self.rx) // 2, 300, fill='white', 
+        #                     text='Yeah, tous les monstres ont été maîtrisés',
+        #                     font=('Courrier', 20))
                              
         print("CtxGfx::doEndMapTitle: Fin")
                              

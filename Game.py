@@ -125,8 +125,8 @@ class GameSession():
         
         self.loadLaby(nextMap)
         self._ctxGfx.resizeLabyCanvas(self._labyObject.LX, self._labyObject.LY)
-        self._monsterMgr.reinitPlayer()
-        self._monsterMgr.reinitMonster()
+        self._entityMgr.reinitPlayer()
+        self._entityMgr.reinitMonster()
         self._gfxRender.reInit()
         
         
@@ -145,67 +145,4 @@ if __name__ == "__main__":
     
     SG.mainLoop()
 
-
-   ##   print("Lancement du jeu de labyrinthe V0.70")
-
-   ##   # Création du Labyrinthe
-    # print("1/ Création du Labyrinthe ....")
-    # #MonLaby = Laby.LabyText()
-    # MonLaby = Laby.LabyText()
-    # MonLaby.loadJSON('./maps/Entony2.json')
-    # #MonLaby.setDefault()
-    # 
-    # # Création de la liste des monstres
-    # MonsterMgr = LabyObj.MonsterList(MonLaby)
-    # 
-    # # Création du context Graphique
-    # print("2/ Création de l'environnement Graphique")
-    # LabyGfx = Gfx.GfxRender(MonLaby,MonsterMgr)
-
-   ##   # Ajout du premier joueur
-    # J1 = LabyGfx.AddUser('John', pv=500)
-    # # Affectation des touches
-    # J1.bindKey({"N": "<Up>", "S": "<Down>", "O": "<Left>", "E": "<Right>"})
-    # # Positionnement du joueur
-    # J1.moveToInitialPos()
-
-   ##   # Ajout du second joueur
-    # J2 = LabyGfx.AddUser('Melba', spriteFile='sprite/Hero/hero3.png', pv=500)
-    # # Affectation des touches
-    # J2.bindKey({"N": "z", "S": "s", "O": "q", "E": "d"})    
-    # J2.moveToInitialPos()
-    # 
-    # 
-
-   ##   
-    # # Ajout d'un monstre
-    # M = LabyGfx.AddMonster('AHRRR', speed=0.5, pv=500)
-    # M.engine = MonsterEngine.MME_Basic
-    # #M.setInitialPos(38,1)
-    # M.moveToInitialPos()
-    # 
-    # # Ajout d'un monstre
-    # M = LabyGfx.AddMonster('AHRRR2', speed=0.3, spriteFile="sprite/Hero/monster04.png", pv=500)
-    # M.engine = MonsterEngine.MME_Standard
-    # #M.setInitialPos(15,17)
-    # M.moveToInitialPos()
-    # 
-    # # Ajout d'un monstre
-    # M = LabyGfx.AddMonster('AHRRR3', speed=0.2, spriteFile="sprite/Hero/flammiche.png", pv=1000)
-    # M.engine = MonsterEngine.MME_Foward
-    # #M.setInitialPos(15,15)
-    # M.moveToInitialPos()
-    # 
-    # M = None
-    # 
-
-   ##   # Première génération de l'affichage du Labyrinthe
-    # LabyGfx.render(0)
-
-
-  ###     
-    # # Nettoyage
-    # #LabyGfx = None
-    # #MonLaby = None
-    # 
 

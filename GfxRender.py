@@ -227,6 +227,10 @@ class GfxRender():
         self._ctxGfx.nx = self._Map.LX
         self._ctxGfx.ny = self._Map.LY
         
+        # force la réinitialisation du plateau
+        self.plateau = None
+        self.mapFx = None
+        
         # Initialisation des ressources grafiques
         self._initGfx()        
 
@@ -416,14 +420,15 @@ class GfxRender():
 
     def renderShadow(self):
         
-        self.mapShadow = Image.new('RGBA',(self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), (255,255,255,0))
+       # self.mapShadow = Image.new('RGBA',(self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), (255,255,255,0))
         
         for x in range(0,self._ctxGfx.nx):
             for y in range(0,self._ctxGfx.ny):
                 code = (self._Map.Carte[y * self._Map.LX + x] & 0xF0) >> 4
                 code = code & 0x0F
                 if code != 0x0F:
-                    self.mapShadow.paste(self.photo_shadow_list[code],(x*self._ctxGfx.ry, y*self._ctxGfx.ry))
+                    #self.mapShadow.paste(self.photo_shadow_list[code],(x*self._ctxGfx.ry, y*self._ctxGfx.ry))
+                    self.mapFinal.paste(self.photo_shadow_list[code],(x*self._ctxGfx.ry, y*self._ctxGfx.ry), self.photo_shadow_list[code])
                 
                 
         
@@ -435,7 +440,8 @@ class GfxRender():
         #self.mapFinal = Image.new('RGBA',(self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), (0,0,0,255))
         
         # Vérifie si le plateau de base a été généré
-        if self.plateau is None : self.renderMap()
+        if self.plateau is None: 
+            self.renderMap()
         
         # calcule la couche dynamique (basé sur l'état des effets)
         self.renderFx(dt)
@@ -445,7 +451,7 @@ class GfxRender():
         # Calcul l'éclairage
         if self._Map.IsShadowEnabled == True:            
             self.renderShadow()
-            self.mapFinal = Image.alpha_composite(self.mapFinal,self.mapShadow)
+            #self.mapFinal = Image.alpha_composite(self.mapFinal,self.mapShadow)
                       
         
         # dump vers Tk

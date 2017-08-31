@@ -1,7 +1,7 @@
 {
     "NomLaby"           : "Map de Test",
     "Theme"             : "Gauntlet",    
-    "IsShadowEnabled"   : false,
+    "IsShadowEnabled"   : true,
     "PlayerSponeCode"   : "@",
     "MonsterSponeCode"  : "#",
     "Carte"   : [
