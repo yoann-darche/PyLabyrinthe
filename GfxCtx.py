@@ -4,6 +4,7 @@ import tkinter as Tk
 from tkinter.messagebox import askyesno
 import tkinter.ttk as ttk
 from PIL import Image, ImageDraw, ImageTk, ImageEnhance
+import time
 
 
 # *****************************************************************************
@@ -24,6 +25,9 @@ class CtxGfx():
         self.nx = 20
         self.ny = 20
         
+        # Callback
+        self.onNext = None
+        
         # Objets graphiques        
         self.can = None
         
@@ -32,6 +36,12 @@ class CtxGfx():
         self._defaultMsg = title
         self._callbackID = None
         self.msgTimeToLive = 0
+        
+        # EndMapTitle
+        self.msgEndTitle = 0
+        self.TitleRect =  None
+        self.TitleMsg = None  
+        self.SessionTime = 0      
 
         self.fenetre = Tk.Tk()
         self.fenetre.config(bg="black")
@@ -45,6 +55,7 @@ class CtxGfx():
         # capture de l'evt de la fenetre
         self.fenetre.protocol("WM_DELETE_WINDOW", self.quitter)
         self.fenetre.bind("<Escape>",self.quitter)
+        self.fenetre.bind("<Control-KeyPress-N>",self.doNext)
         
         # Tableau des monstres
         self.tkMonsterBoard = None
@@ -78,6 +89,8 @@ class CtxGfx():
         
         self.cInfoMsg = self.cInfo.create_text(w // 2, 60, width=w-240, fill='white', 
                              text=self._defaultMsg, justify=Tk.LEFT, font=('Courrier', 20,))
+                             
+        self.cTimeMsg =  self.cInfo.create_text(w-70,40, width=240, fill='#00FFFF', text='0000.0', justify=Tk.RIGHT, font=('Courrier',30))
       
 
         
@@ -87,7 +100,8 @@ class CtxGfx():
         """
         self.nx = nx
         self.ny = ny
-        self.can.config(width=self.nx*self.rx, height=self.ny*self.ry)        
+        self.can.config(width=self.nx*self.rx, height=self.ny*self.ry)    
+        self.SessionTime = time.time()
        
        
     def quitter(self, event=None):
@@ -100,6 +114,13 @@ class CtxGfx():
         
         if reponse:
             self.fenetre.destroy()
+            
+    def doNext(self, event):
+        
+        try:
+            self.onNext()
+        except:
+            pass
 
 
     # **************************************************************************
@@ -138,6 +159,14 @@ class CtxGfx():
         Fonction assurant la mise à jour de l'interface
         """        
         
+        # Gestion du EndTitle
+        if self.msgEndTitle > 0:
+            self.msgEndTitle -= dt
+            if self.msgEndTitle <= 0:
+                self.doCleanEndMapTitle()
+                self.msgEndTitle = 0
+        
+        
         # Gestion des messages
         if self.msgTimeToLive > 0:
             self.msgTimeToLive -= dt
@@ -150,6 +179,11 @@ class CtxGfx():
             (m,t) = LabyObj.popMessage()
             if m is not None:
                 self.showMessage(m,t)
+                
+        # Affichage du Temps
+        u = "{0:0>4.1f}".format(time.time()-self.SessionTime)
+        #print(">", u)
+        self.cInfo.itemconfig(self.cTimeMsg, text=u) 
                 
                 
     # **************************************************************************
@@ -203,22 +237,23 @@ class CtxGfx():
             
         print("CtxGfx::doEndMapTitle: Début")
         
-        self.TitleRect = self.can.create_rectangle(self.rx*2, 250, (self.rx*self.nx)-(self.rx*2), 350, 
+        if self.TitleRect is None:
+            
+            self.msgEndTitle = 5
+        
+            self.TitleRect = self.can.create_rectangle(self.rx*2, 250, (self.rx*self.nx)-(self.rx*2), 350, 
                           fill='#004F00', width=2, outline='#FFFFFF')
 
-        print("CtxGfx::doEndMapTitle: Yo")
-
-        self.TitleMsg  = self.can.create_text( (self.nx*self.rx) // 2, 300, fill='white', 
+            self.TitleMsg  = self.can.create_text( (self.nx*self.rx) // 2, 300, fill='white', 
                              text='Yeah, tous les monstres ont été maîtrisés',
                              font=('Courrier', 20))
                              
-        print("CtxGfx::doEndMapTitle: Fin")
+        return(time.time() - self.SessionTime)
                              
         
 
-    def doCleanMsg(self):
-        
-        self.clearMessage()
+    def doCleanEndMapTitle(self):
+                
         self.can.delete(self.TitleRect)
         self.can.delete(self.TitleMsg)
         self.TitleRect =  None

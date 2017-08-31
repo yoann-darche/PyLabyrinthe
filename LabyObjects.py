@@ -115,6 +115,8 @@ class Laby():
         
         self.isFinished  = False
         
+        self.MsgList.clear()
+        
         
         
         

@@ -33,6 +33,8 @@ class GameSession():
         
         # Création du context Graphique
         self._ctxGfx = GfxCtx.CtxGfx("Labyrinthe d'Info@Leze V0.80a")
+        self._ctxGfx.onNext = self._onNextMap
+        
         # Affichage de l'interface
         self._ctxGfx.construitInterface()
         
@@ -51,7 +53,13 @@ class GameSession():
 
     def loadMapList(self):
         
-        self.mapList = ["./maps/litle.json", "./maps/BaseTest.json", "./maps/Default.json", "./maps/Gauntlet.json"]
+        self.mapList = [
+            "./maps/litle.json", 
+            "./maps/Intro_001.json",             
+            "./maps/Learning.json", 
+            "./maps/Default.json", 
+            "./maps/FindTheWay.json",            
+            "./maps/Phasor.json"]
         self.mapList.reverse()
         
     def loadLaby(self,LabyName):
@@ -113,7 +121,8 @@ class GameSession():
         # Call back utilisé pour détecté la fin d'une partie
         
         print("GameSession::_onMapEnd: On Map End !!!!!!!!!!!")
-        self._ctxGfx.doEndMapTitle()
+        time = self._ctxGfx.doEndMapTitle()
+        print("Time::", time)
         self._onNextMap()
         
         
