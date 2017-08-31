@@ -228,8 +228,14 @@ class GfxRender():
         self._ctxGfx.ny = self._Map.LY
         
         # force la réinitialisation du plateau
+        self._ctxGfx.can.delete(self.tkPlateau) 
+        self._ctxGfx.can.delete(self.tkPlateauId) 
+        self.tkPlateau   = None
+        self.tkPlateauId = None 
         self.plateau = None
         self.mapFx = None
+        
+        self._ctxGfx.fenetre.update_idletasks()
         
         # Initialisation des ressources grafiques
         self._initGfx()        
@@ -453,21 +459,19 @@ class GfxRender():
             self.renderShadow()
             #self.mapFinal = Image.alpha_composite(self.mapFinal,self.mapShadow)
                       
-        
-        # dump vers Tk
-        #OldTkId = self.tkPlateauId
-        
-        
+                      
         self._ctxGfx.can.delete(self.tkPlateau) 
-        self._ctxGfx.can.delete(self.tkPlateauId) 
-        self.tkPlateau = ImageTk.PhotoImage(image=self.mapFinal,  master=self._ctxGfx.fenetre)
-        self.tkPlateauId = self._ctxGfx.can.create_image(0, 0, anchor=Tk.NW, image=self.tkPlateau, state= Tk.NORMAL)
+        self.tkPlateau = ImageTk.PhotoImage(image=self.mapFinal,  master=self._ctxGfx.can)
+
+        if self.tkPlateauId is not None:
+            self._ctxGfx.can.itemconfig(self.tkPlateauId , image=self.tkPlateau)
+        else:
+            self.tkPlateauId = self._ctxGfx.can.create_image(0, 0, anchor=Tk.NW, image=self.tkPlateau, state= Tk.NORMAL)
+        
+        #self._ctxGfx.can.delete(self.tkPlateauId)         
         self._ctxGfx.can.tag_lower(self.tkPlateauId) 
-        
-        
-        
-        
-        
+                
+
         # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         # %% Affichage des Persos      %%
         # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -492,6 +496,8 @@ class GfxRender():
         # Calcule la différence
         dt = cur - self._lastTime
 
+        # Purge les misae à jour du canvas
+        self._ctxGfx.can.update()
 
         # Mise à jour de l'interface
         self._ctxGfx.doUpdate(dt, self._Map)

@@ -38,8 +38,8 @@ class CtxGfx():
         self.fenetre.title(title)
         
         # Mise au premier plan
-        self.fenetre.attributes('-fullscreen',1)
-        self.fenetre.overrideredirect(1)
+        #self.fenetre.attributes('-fullscreen',1)
+        #self.fenetre.overrideredirect(1)
 
         
         # capture de l'evt de la fenetre
