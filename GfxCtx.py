@@ -1,6 +1,7 @@
 
 # -*- coding: utf-8 -*-
 import tkinter as Tk
+from tkinter.messagebox import askyesno
 import tkinter.ttk as ttk
 from PIL import Image, ImageDraw, ImageTk, ImageEnhance
 
@@ -26,11 +27,6 @@ class CtxGfx():
         # Objets graphiques        
         self.can = None
         
-        # Objets Widget
-        self.playerLKP = None        # Liste Déroulante pour les joueurs
-        self.selectedPlayer = None   # Variable contenant le joueur sélectioné        
-        self.playerPV = None         # Zone text pour afficher les info d'un joueur
-
 
         # Message par défaut
         self._defaultMsg = title
@@ -38,8 +34,17 @@ class CtxGfx():
         self.msgTimeToLive = 0
 
         self.fenetre = Tk.Tk()
-        self.fenetre.attributes('-fullscreen',1)
+        self.fenetre.config(bg="black")
         self.fenetre.title(title)
+        
+        # Mise au premier plan
+        self.fenetre.attributes('-fullscreen',1)
+        self.fenetre.overrideredirect(1)
+
+        
+        # capture de l'evt de la fenetre
+        self.fenetre.protocol("WM_DELETE_WINDOW", self.quitter)
+        self.fenetre.bind("<Escape>",self.quitter)
         
         # Tableau des monstres
         self.tkMonsterBoard = None
@@ -50,20 +55,16 @@ class CtxGfx():
         Cette fonction se charge de la construction de l'interface
         :return:
         """
-
-
-
-       # w = self.nx*self.rx
+        # w = self.nx*self.rx
         w = 1200
         h = self.ny*self.ry
         
         # Création de la barre des infos
-        self.cInfo = Tk.Canvas(self.fenetre, width=w, height=80, bd=0, bg='black')        
+        self.cInfo = Tk.Canvas(self.fenetre, width=w, height=80, bd=0, bg='black', relief="flat")        
         self.cInfo.pack()
         
         # Création du context graphique pour l'affichage du labyrinthe
-        self.can = Tk.Canvas(self.fenetre, width=w, height=h, bd=0, bg='black')
-        #self.can.pack(anchor=Tk.CENTER)
+        self.can = Tk.Canvas(self.fenetre, width=w, height=h, bd=0, bg='black')        
         self.can.pack()
 
         
@@ -86,13 +87,19 @@ class CtxGfx():
         """
         self.nx = nx
         self.ny = ny
-        self.can.config(width=self.nx*self.rx, height=self.ny*self.ry)
+        self.can.config(width=self.nx*self.rx, height=self.ny*self.ry)        
+       
+       
+    def quitter(self, event=None):
+        """
+        Fonction appelé pour finir le programme, une confirmation est demandée avant
+        """
         
+        reponse = askyesno("Quitter le programme ?",
+        "Voulez-vous réellement terminer ? \n cliquer <<oui>> pour finir")
         
-        
-
-    def addGUIPlayer(self, playerName):
-        self.playerLKP['values'] = list(self.playerLKP['values']) + [playerName]
+        if reponse:
+            self.fenetre.destroy()
 
 
     # **************************************************************************
@@ -196,14 +203,14 @@ class CtxGfx():
             
         print("CtxGfx::doEndMapTitle: Début")
         
-        #self.TitleRect = self.can.create_rectangle(self.rx*2, 250, w-(self.rx*2), 350, 
-        #                   fill='#004F00', width=2, outline='#FFFFFF')
+        self.TitleRect = self.can.create_rectangle(self.rx*2, 250, (self.rx*self.nx)-(self.rx*2), 350, 
+                          fill='#004F00', width=2, outline='#FFFFFF')
 
         print("CtxGfx::doEndMapTitle: Yo")
 
-        #self.TitleMsg  = self.can.create_text( (self.nx*self.rx) // 2, 300, fill='white', 
-        #                     text='Yeah, tous les monstres ont été maîtrisés',
-        #                     font=('Courrier', 20))
+        self.TitleMsg  = self.can.create_text( (self.nx*self.rx) // 2, 300, fill='white', 
+                             text='Yeah, tous les monstres ont été maîtrisés',
+                             font=('Courrier', 20))
                              
         print("CtxGfx::doEndMapTitle: Fin")
                              
