@@ -140,6 +140,7 @@ class LabyText(LabyObjects.Laby):
         
         self.CarteTxt         = data['Carte']
         self.NomLaby          = data['NomLaby']
+        self.FileName         = fileName
         self.Theme            = data['Theme']
         self.IsShadowEnabled  = data['IsShadowEnabled']
         self.MonsterSponeCode = data['MonsterSponeCode']

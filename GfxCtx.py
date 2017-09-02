@@ -27,7 +27,8 @@ class CtxGfx():
         
         # Callback
         self.onNext = None
-        
+        self.onReload = None        
+    
         # Objets graphiques        
         self.can = None
         
@@ -54,8 +55,9 @@ class CtxGfx():
         
         # capture de l'evt de la fenetre
         self.fenetre.protocol("WM_DELETE_WINDOW", self.quitter)
-        self.fenetre.bind("<Escape>",self.quitter)
+        self.fenetre.bind("<Escape>",self.quitterHard)
         self.fenetre.bind("<Control-KeyPress-N>",self.doNext)
+        self.fenetre.bind("<Control-KeyPress-R>",self.doReload)
         
         # Tableau des monstres
         self.tkMonsterBoard = None
@@ -115,10 +117,23 @@ class CtxGfx():
         if reponse:
             self.fenetre.destroy()
             
+    def quitterHard(self, event=None):
+        """
+        Fonction appelé pour finir le programme Direct
+        """
+        self.fenetre.destroy()
+            
     def doNext(self, event):
         
         try:
             self.onNext()
+        except:
+            pass
+            
+    def doReload(self, event):
+        
+        try:
+            self.onReload()
         except:
             pass
 

@@ -34,6 +34,7 @@ class GameSession():
         # Création du context Graphique
         self._ctxGfx = GfxCtx.CtxGfx("Labyrinthe d'Info@Leze V0.80a")
         self._ctxGfx.onNext = self._onNextMap
+        self._ctxGfx.onReload = self._onReload
         
         # Affichage de l'interface
         self._ctxGfx.construitInterface()
@@ -54,6 +55,7 @@ class GameSession():
     def loadMapList(self):
         
         self.mapList = [
+            "./maps/Special.json",
             "./maps/litle.json", 
             "./maps/Intro_001.json",             
             "./maps/Learning.json", 
@@ -128,7 +130,7 @@ class GameSession():
         
     def _onNextMap(self):
         
-        print("GameSession::_onNextMap:: Start")
+        print("GameSession::_onNextMap")
         
         nextMap = self.mapList.pop()
         
@@ -137,6 +139,17 @@ class GameSession():
         self._entityMgr.reinitPlayer()
         self._entityMgr.reinitMonster()
         self._gfxRender.reInit()
+        
+    def _onReload(self):
+        
+        mapName = self._labyObject.FileName
+        print("GameSession::_onReload")
+        
+        self.loadLaby(mapName)
+        self._ctxGfx.resizeLabyCanvas(self._labyObject.LX, self._labyObject.LY)
+        self._entityMgr.reinitPlayer()
+        self._entityMgr.reinitMonster()
+        self._gfxRender.reInit()        
         
         
 

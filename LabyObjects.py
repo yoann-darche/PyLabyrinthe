@@ -33,6 +33,7 @@ class Laby():
 
 
         self.NomLaby = ''        # Nom du Labyrinthe
+        self.FileName = ''       # Nom du fichier
         self.Theme = "Gray"      # Theme graphique du labyrinthe
         self.LX = -1             # Largeur du Labyrinthe
         self.LY = -1             # Hauteur du Labyrinthe
