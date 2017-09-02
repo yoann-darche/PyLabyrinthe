@@ -404,12 +404,16 @@ class GfxRender():
         Fonction qui générent les modifications graphiques au dessus de la map  
         pour l'affichage des effets (porte, trésor, etc...)
         """
+        res = False
         
         if self.mapFx is None:
             self.mapFx = Image.new('RGBA',(self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), (0,0,255,0))
         
         for k in self._Map.FXList:
-            self._Map.FXList[k].renderFx(self, dt)
+            res = res or self._Map.FXList[k].renderFx(self, dt)
+            
+        print(res)
+        return res
             
     def addFxTile(self,x,y,tileId):
         """
@@ -450,14 +454,18 @@ class GfxRender():
             self.renderMap()
         
         # calcule la couche dynamique (basé sur l'état des effets)
-        self.renderFx(dt)
+        if self.renderFx(dt):
+            self.mapLastFx = Image.alpha_composite(self.plateau,self.mapFx)        
         
-        self.mapFinal = Image.alpha_composite(self.plateau,self.mapFx)
+        self.mapFinal = self.mapLastFx.copy()
+        
+        #self.renderFx(dt)
+        #self.mapFinal = Image.alpha_composite(self.plateau,self.mapFx)
+        
         
         # Calcul l'éclairage
         if self._Map.IsShadowEnabled == True:            
-            self.renderShadow()
-            #self.mapFinal = Image.alpha_composite(self.mapFinal,self.mapShadow)
+            self.renderShadow()            
                       
                       
         self._ctxGfx.can.delete(self.tkPlateau) 
@@ -496,7 +504,7 @@ class GfxRender():
         # Calcule la différence
         dt = cur - self._lastTime
 
-        # Purge les misae à jour du canvas
+        # Purge les mise à jour du canvas
         self._ctxGfx.can.update()
 
         # Mise à jour de l'interface

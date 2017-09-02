@@ -68,7 +68,9 @@ class LTFxTunnel(LabyTextFx.LabyTextFx):
                 ObjGfx.addFxTile(x,y,SpriteIndex.SPRITE_TELEPORTEUR)
             self._hasChanged = False
         
-        return True        
+            return True 
+            
+        return False        
         
         
         

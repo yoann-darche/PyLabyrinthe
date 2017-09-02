@@ -76,8 +76,11 @@ class LTFxLightOn(LabyTextFx.LabyTextFx):
         if self._hasChanged :
             for (x,y) in self.LigthOnSet: 
                 ObjGfx.addFxTile(x,y,SpriteIndex.SPRITE_LIGTHON)
+                
+            self._hasChanged = False
+            return True
         
-        return True        
+        return False        
         
         
         

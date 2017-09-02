@@ -135,8 +135,12 @@ class LTFxPorte(LabyTextFx.LabyTextFx):
                     ObjGfx.addFxTile(x,y,doorV)
                 
             self._hasChanged = False
+            
+            return True
+            
+        return False
         
-        return True        
+                
         
     def gfxLinkFx(self, car=None):
         

@@ -49,8 +49,8 @@ class LTFxSensUnique(LabyTextFx.LabyTextFx):
                     ObjLabyTxt._registerFxCb(self.checkFX, lx, ly)
                     
             self._hasChanged = True
-                            
-             
+                                        
+            
         return True
         
     def checkFX(self, ObjPlayer, type, x=None, y=None):
@@ -92,7 +92,9 @@ class LTFxSensUnique(LabyTextFx.LabyTextFx):
                 
             self._hasChanged = False
         
-        return True        
+            return True 
+            
+        return False       
         
     def gfxLinkFx(self, car=None):
 

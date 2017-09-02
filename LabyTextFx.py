@@ -54,9 +54,11 @@ class LabyTextFx():
         """
         Fonction qui assure la mise à jour de la map dynamique
         param: dt correspond delta time
+        
+        Retourne True si il y a eu une mise à jour graphique
         """
         
-        return True
+        return False
         
     def gfxLinkFx(self, car=None):
         """

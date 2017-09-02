@@ -56,7 +56,7 @@ class LTFxBlackOut(LabyTextFx.LabyTextFx):
         
     def renderFx(self, ObjGfx, dt):
                 
-        return True        
+        return False        
         
         
         

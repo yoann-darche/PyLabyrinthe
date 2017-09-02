@@ -169,7 +169,9 @@ class LTFxPorteEt(LabyTextFx.LabyTextFx):
                 
             self._hasChanged = False
         
-        return True        
+            return True    
+            
+        return False   
         
     def gfxLinkFx(self, car=None):
         

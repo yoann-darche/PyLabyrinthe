@@ -63,8 +63,9 @@ class LTFxAspirateur(LabyTextFx.LabyTextFx):
                 ObjGfx.addFxTile(x,y,SpriteIndex.SPRITE_ASPIRATEUR)
                 
             self._hasChanged = False
+            return True
         
-        return True        
+        return False        
         
         
         
