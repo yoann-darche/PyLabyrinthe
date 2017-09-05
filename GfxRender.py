@@ -253,10 +253,7 @@ class GfxRender():
         
         if self.photo_error is None:
             self.photo_error = Image.open("sprite/Std/ErrorTile.png")
-            
-        if self.photo_back is None:
-            self.photo_back  = Image.open("sprite/"+self._Map.Theme +"/background.png")
-        
+                    
         
         if (self.lastTheme is None) or (self.lastTheme !=  self._Map.Theme):
         
@@ -264,6 +261,9 @@ class GfxRender():
             self.photo_wall_list.clear()
             self.photo_asset_list.clear()
             self.photo_shadow_list.clear()
+            
+            # lecture du fond
+            self.photo_back  = Image.open("sprite/"+self._Map.Theme +"/background.png")
                     
             # Extraction des images mur
             photo_set = Image.open("sprite/"+self._Map.Theme +"/walls.png")
@@ -412,7 +412,6 @@ class GfxRender():
         for k in self._Map.FXList:
             res = res or self._Map.FXList[k].renderFx(self, dt)
             
-        print(res)
         return res
             
     def addFxTile(self,x,y,tileId):

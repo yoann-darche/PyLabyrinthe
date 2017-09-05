@@ -55,6 +55,7 @@ class GameSession():
     def loadMapList(self):
         
         self.mapList = [
+            "./maps/Spirale.json",
             "./maps/Special.json",
             "./maps/litle.json", 
             "./maps/Intro_001.json",             
@@ -130,10 +131,17 @@ class GameSession():
         
     def _onNextMap(self):
         
-        print("GameSession::_onNextMap")
+        #print("GameSession::_onNextMap")
         
-        nextMap = self.mapList.pop()
-        
+        try:
+            nextMap = self.mapList.pop()
+            print("GameSession::_onNextMap::=",nextMap)
+        except:        
+        #if nextMap is None:
+            print("GameSession::_onNextMap::loadMap")
+            self.loadMapList()
+            nextMap = self.mapList.pop()
+                
         self.loadLaby(nextMap)
         self._ctxGfx.resizeLabyCanvas(self._labyObject.LX, self._labyObject.LY)
         self._entityMgr.reinitPlayer()

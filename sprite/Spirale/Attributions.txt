@@ -1,0 +1,6 @@
+Background tilesets (walls, floors, doors) are provided by
+
+    Ricardo Chirino
+    Open Game Art : https://opengameart.org/content/gauntlet-like-tiles
+
+Dumped from JavaScript Gaunnlet : http://codeincomplete.com/posts/javascript-gauntlet/
