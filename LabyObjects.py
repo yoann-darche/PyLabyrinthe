@@ -43,6 +43,7 @@ class Laby():
         self.CarteFX = []        # Recense les effets dynamiques
         
         self.IsShadowEnabled = False # Desactivation de la fonction calcul d'ombre
+        self.IsShadowUpdated = False # Indique si une évolution sur les ombres à eu lieu
         
         self.PlayerSponePlace = set()  # Ensemble des positions d'apparition
         self.MonsterSponePlace = set()  # Ensemble des positions d'apparition
@@ -383,6 +384,8 @@ class Laby():
                 pos = py * self.LX + px
             
                 self.Carte[pos] = self.Carte[pos] | code
+                
+        self.IsShadowUpdated  = True
     
     def blackOut(self):
         
