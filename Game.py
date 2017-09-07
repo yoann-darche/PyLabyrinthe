@@ -56,6 +56,7 @@ class GameSession():
         
         self.mapList = [
             "./maps/Template.json",
+            "./maps/TestLumiere.json",
             "./maps/Spirale.json",
             "./maps/Special.json",
             "./maps/litle.json", 

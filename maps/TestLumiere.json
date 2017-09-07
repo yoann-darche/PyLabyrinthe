@@ -1,0 +1,86 @@
+{
+    "NomLaby"           : "Test de Lumière",
+    "Theme"             : "Blue",   
+    "IsShadowEnabled"   : true,
+    "PlayerSponeCode"   : "@",
+    "MonsterSponeCode"  : "#",
+    "Carte"   : [
+            "+---------------------------------+",
+            "|                                 |",
+            "|   @   L                        #|",
+            "|                                 |",
+            "|                                 |",
+            "|    ZZZZZ  ZZZZZ  ZZZZZZZZZ      |",
+            "|    Z Z Z  Z   Z  Z   Z   Z      |",
+            "|    ZZZZZ  ZZZZZ  Z   Z   Z      |",
+            "|                  Z   Z   Z      |",
+            "|           ZZZZ   ZZZZZZZZZ      |",
+            "|  ZZZ      Z  Z   Z   Z   Z      |",
+            "|  Z Z      Z  Z   Z   Z   Z      |",
+            "|  ZZZ      ZZZZ   Z   Z   Z      |",
+            "|                  ZZZZZZZZZ      |",
+            "|            A                    |",
+            "+---------------------------------+"
+    ],
+	"Light" : [
+            "+---------------------------------+",
+            "|                                 |",
+            "|   @                            #|",
+            "|                                 |",
+            "|                                 |",
+            "|    ZZZZZ  ZZZZZ  ZZZZZZZZZ      |",
+            "|    Z ZLZ  Z L Z  Z   Z   Z      |",
+            "|    ZZZZZ  ZZZZZ  Z L Z L Z      |",
+            "|                  Z   Z   Z      |",
+            "| L L L    LZZZZL  ZZZZZZZZZ      |",
+            "|           Z  Z   ZL LZ   Z      |",
+            "| L   L     Z  Z   Z L Z L Z      |",
+            "|          LZZZZL  ZL LZ   Z      |",
+            "| L L L            ZZZZZZZZZ      |",
+            "|            A                    |",
+            "+---------------------------------+"
+    ],
+    "FXList"    : [
+        { "MapCode"     : "T", 
+          "FXHandler"   : "LabyTextFxTunnel.LTFxTunnel"},
+        
+        { "MapCode"     : "A", 
+          "FXHandler"   : "LabyTextFxAspirateur.LTFxAspirateur"},
+          
+        { "MapCode"     : "^", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "N" } },
+        { "MapCode"     : "_", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "S" } },
+        { "MapCode"     : "<", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "O" } },
+        { "MapCode"     : ">", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "E" } },
+
+          
+        { "MapCode"     : "P", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte"},
+
+        { "MapCode"     : "Q", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 8} },
+          
+        { "MapCode"     : "R", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 4} },
+        
+        { "MapCode"     : "S", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt"},
+        { "MapCode"     : "U", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt",
+          "FXOptions"   : { "closeTime" : 4} },
+		  
+		{ "MapCode"     : "L", 
+          "FXHandler"   : "LabyTextFxLightOn.LTFxLightOn"} 
+		  
+        ]
+ 
+}
