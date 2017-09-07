@@ -139,6 +139,11 @@ class LabyText(LabyObjects.Laby):
         data = json.load(f)
         
         self.CarteTxt         = data['Carte']
+        try:
+            self.CarteLight       = data['Light']
+        except:
+            self.CarteLight = None
+            
         self.NomLaby          = data['NomLaby']
         self.FileName         = fileName
         self.Theme            = data['Theme']
@@ -154,8 +159,12 @@ class LabyText(LabyObjects.Laby):
         
         # Convertion du labyrinthe Text en format interne
         self._decodeTxtLaby()
+        self._decodeTxtLight()
         
 
+    def resetPermananteLigth(self, PermOnly = False):
+        
+        return self._decodeTxtLight(PermOnly)
 
     def _decodeTxtLaby(self):
         """
@@ -180,7 +189,6 @@ class LabyText(LabyObjects.Laby):
                 else:
                     # Vérifie les cases à proximité
                     self.Carte[ly * self.LX + lx] = self._getLinkCode(lx,ly)
-        
         
         self.__isValid = True
         
@@ -237,6 +245,26 @@ class LabyText(LabyObjects.Laby):
                 else:
                     self._registerFx(LabyTextFxLightOn.LTFxLightOn(**options),mapCode)
         
+    def _decodeTxtLight(self, PermOnly=False):
+        """
+        Cette fonction assure le décodage du laby en format texte
+        et initialise le format interne de LabyObjet
+        """
+        
+        if self.CarteLight is None:
+            return
+        
+        # Pour chaque ligne du Labyrinthe
+        for ly, ligne in enumerate(self.CarteLight):
+
+            # Pour chaque colonne du Labyrinthe
+            for lx, car in enumerate(ligne):
+                
+                if car == 'L':
+                    self.updateLight(lx,ly)
+                elif not(PermOnly) and car == 'T':
+                    self.updateLight(lx,ly)
+       
 
 ###
 #   Test de la Classe

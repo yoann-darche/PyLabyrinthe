@@ -392,10 +392,21 @@ class Laby():
         for p in range(0,len(self.Carte)):
             self.Carte[p] = self.Carte[p] & 0x0F
             
+        self.resetPermananteLigth(True)
+            
     def showAll(self):
         
         for p in range(0,len(self.Carte)):
             self.Carte[p] = self.Carte[p] | 0xF0
+            
+    def resetPermananteLigth(self, PermOnly = False):
+        """
+        Fonction utilisée pour réactivé les lumières par défaut.
+        si PermOnly = True, seules les lumières dite permanantes seront reprises,
+        sinon toute les lumières auto seront réactivées
+        """
+        
+        return
     
     # **************************************************************************
     # ** Gestion des effets dynamiques                                        **
