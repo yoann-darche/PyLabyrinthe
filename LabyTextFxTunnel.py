@@ -38,7 +38,7 @@ class LTFxTunnel(LabyTextFx.LabyTextFx):
                     
             self._hasChanged = True
                     
-        print("LTFXTunnel::initFx::ExchangeSet = ", self.ExchangeSet)
+        print("LTFXTunnel::initFx::ExchangeSet[",code,"] = ", self.ExchangeSet)
              
         return True
         

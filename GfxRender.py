@@ -437,7 +437,11 @@ class GfxRender():
                 code = code & 0x0F
                 if code != 0x0F:
                     #self.mapShadow.paste(self.photo_shadow_list[code],(x*self._ctxGfx.ry, y*self._ctxGfx.ry))
-                    self.mapFinal.paste(self.photo_shadow_list[code],(x*self._ctxGfx.ry, y*self._ctxGfx.ry), self.photo_shadow_list[code])
+                    self.mapFinal.paste(self.photo_shadow_list[code],
+                                        (x*self._ctxGfx.ry, y*self._ctxGfx.ry),
+                                        self.photo_shadow_list[code])
+                    
+                    # self.photo_shadow_list[code])
                 
                 
         

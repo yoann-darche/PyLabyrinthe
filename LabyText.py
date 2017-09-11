@@ -19,6 +19,7 @@ import LabyTextFxPorteEt
 import LabyTextFxSensUnique
 import LabyTextFxBlackOut
 import LabyTextFxLightOn
+import LabyTextFxTunnelMonster
 
 class LabyText(LabyObjects.Laby):
     
@@ -214,6 +215,9 @@ class LabyText(LabyObjects.Laby):
                 
             elif fxObject == "LabyTextFxTunnel.LTFxTunnel":
                 self._registerFx(LabyTextFxTunnel.LTFxTunnel(),mapCode)
+                
+            elif fxObject == "LabyTextFxTunnelMonster.LTFxTunnelMonster":
+                self._registerFx(LabyTextFxTunnelMonster.LTFxTunnelMonster(),mapCode)
                 
             elif fxObject == "LabyTextFxSensUnique.LTFxSensUnique":
                 if options is None:

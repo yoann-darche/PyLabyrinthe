@@ -6,6 +6,8 @@ définit dans le fichier assets.png
 """
 
 SPRITE_TELEPORTEUR              = 0
+SPRITE_TELEPORTEURMONSTER       = 17
+
 SPRITE_TRESOR                   = 1
 SPRITE_ASPIRATEUR               = 15
 SPRITE_LIGTHON                  = 16

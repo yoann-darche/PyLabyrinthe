@@ -55,7 +55,7 @@ class GameSession():
     def loadMapList(self):
         
         self.mapList = [
-            "./maps/Template.json",
+            "./maps/MonsterOnly.json",
             "./maps/TestLumiere.json",
             "./maps/Spirale.json",
             "./maps/Special.json",

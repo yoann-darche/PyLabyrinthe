@@ -1,0 +1,82 @@
+{
+    "NomLaby"           : "Monstre Seulement",
+    "Theme"             : "Blue",   
+    "IsShadowEnabled"   : false,
+    "PlayerSponeCode"   : "@",
+    "MonsterSponeCode"  : "#",
+    "Carte"   : [
+            "+--------------------------------------+",
+            "|        Z         Z          Z        |",
+            "| ZZZZZZ   ZZZZZZZ Z ZZZZZZZZ   ZZZZZZ |",
+            "| Z Z  Z ZZZ    ZZ          ZZZ Z  Z Z |",
+            "| Z  # Z     Z   ZZZZZZZZZZ     Z #  Z |",
+            "| ZZ^SZZZZZZZZZZ Z        ZZZ^Z ZZU^ZZ |",
+            "|  Z M >       Z     p    Zq  Z Z M Z  |",
+            "|  ZZZZZQZZZZ ZZZZZZZZZZZ ZZZ Z Z_ZZZ  |",
+            "|           Z >A   Z   MZ   Z^Z Z Z    |",
+            "|           ZZZZZZ   ZZZZ Z   Z Z Z    |",
+            "|               Z     Z   Z   Z Z Z    |",
+            "|               > ZZZ P ZZZZZZZ Z Z    |",
+            "|               Z     Z  rZ     Z Z    |",
+            "|             ZZZZ   ZZZZZZRZZZZZ Z    |",
+            "|             ZM   Z   A<         Z    |",
+            "|             ZZZZZZZZZZZZZZZZZZZZZ    |",
+            "|               ZZ   ZZ                |",
+            "|             u Z     Z s              |",
+            "|               Z  @  Z                |",
+            "|               Z     Z                |",
+            "|               ZZ   ZZ                |",
+            "|               Z  Z  Z                |",
+            "|               Z     Z                |",
+            "| s                                  u |",
+            "+--------------------------------------+"
+    ],
+    "FXList"    : [
+        { "MapCode"     : "T", 
+          "FXHandler"   : "LabyTextFxTunnel.LTFxTunnel"},
+        { "MapCode"     : "M", 
+          "FXHandler"   : "LabyTextFxTunnelMonster.LTFxTunnelMonster"},
+        
+        { "MapCode"     : "A", 
+          "FXHandler"   : "LabyTextFxAspirateur.LTFxAspirateur"},
+          
+        { "MapCode"     : "^", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "N" } },
+        { "MapCode"     : "_", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "S" } },
+        { "MapCode"     : "<", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "O" } },
+        { "MapCode"     : ">", 
+          "FXHandler"   : "LabyTextFxSensUnique.LTFxSensUnique",
+          "FXOptions"   : { "dir" : "E" } },
+
+          
+        { "MapCode"     : "P", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 8} },
+
+        { "MapCode"     : "Q", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 4} },
+          
+        { "MapCode"     : "R", 
+          "FXHandler"   : "LabyTextFxPorte.LTFxPorte",
+          "FXOptions"   : { "closeTime" : 4} },
+        
+        { "MapCode"     : "S", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt",
+          "FXOptions"   : { "closeTime" : 10}},
+          
+        { "MapCode"     : "U", 
+          "FXHandler"   : "LabyTextFxPorteEt.LTFxPorteEt",
+          "FXOptions"   : { "closeTime" : 10} },
+		  
+		{ "MapCode"     : "B", 
+          "FXHandler"   : "LabyTextFxBlackOut.LTFxBlackOut"} 
+		  
+        ]
+ 
+}
