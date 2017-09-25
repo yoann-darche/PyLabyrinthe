@@ -81,7 +81,7 @@ class GameSession():
         M.moveToInitialPos()
         
         # Ajout d'un monstre
-        M = self._gfxRender.AddMonster('More', speed=0.3, spriteFile="sprite/Hero/monster04.png", pv=500)
+        M = self._gfxRender.AddMonster('More', speed=0.3, spriteFile="sprite/Hero/monster05.png", pv=500)
         M.engine = MonsterEngine.MME_Standard
         M.moveToInitialPos()
         
