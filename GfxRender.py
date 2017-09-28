@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import tkinter as Tk
-from PIL import Image, ImageDraw, ImageTk, ImageEnhance
-import os
+#import tkinter as Tk
+#from PIL import Image, ImageDraw, ImageTk, ImageEnhance
+import os, time
 
-import time
+import pygame
+from pygame.locals import *
+
 
 from Entity import Player, Monster
 
@@ -41,9 +43,9 @@ class GfxPlayer(Player):
         Player.__init__(self,initPv)
 
         # Contient le sprite du joueur
-        # self.Sprite = Tk.PhotoImage(file=spriteFile, master=self._ctxGfx.fenetre)
-        self.Sprite = Image.open(spriteFile)
-        self._img = None
+        self.Sprite = pygame.image.load(spriteFile)
+        #self.Sprite = Image.open(spriteFile)
+        #self._img = None
 
         # Déclanche l'affichage
         self._hasChanged = True
@@ -64,7 +66,8 @@ class GfxPlayer(Player):
 
         # Ici, nous parcourrons le dictionaire pour associer les touches de dépalcement
         for k, i in listKey.items():
-            self._ctxGfx.fenetre.bind(i, lambda event, o=self, ky=k: o.move(ky))
+            pass
+            #self._ctxGfx.fenetre.bind(i, lambda event, o=self, ky=k: o.move(ky))
 
         return True
 
@@ -75,16 +78,10 @@ class GfxPlayer(Player):
         :return:
         """
 
-        if not self._hasChanged:
-            return None
-
-        if self._img is None:            
-            self.tkSprite = ImageTk.PhotoImage(image=self.Sprite, master=self._ctxGfx.can)
-            self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
-                                                      image=self.tkSprite, tag='sprite')
-        else:
-            self._ctxGfx.can.coords(self._img, self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry)
-            self._ctxGfx.can.tag_raise(self._img) 
+        #if not self._hasChanged:
+        #    return None
+            
+        self._ctxGfx.fenetre.blit(self.Sprite, (self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry))
 
         self._hasChanged = False
 
@@ -118,7 +115,7 @@ class GfxMonster(Monster):
         Monster.__init__(self,speed,initPv)
 
         # Contient le sprite du joueur
-        self.Sprite = Image.open(spriteFile)
+        self.Sprite = pygame.image.load(spriteFile)
         self._img = None
 
         # Déclanche l'affichage
@@ -137,27 +134,11 @@ class GfxMonster(Monster):
         :return:
         """
 
-        if not self._hasChanged:
-            return None
+        #if not self._hasChanged:
+           # return None
 
-        if self._img is None:
-            self.tkSprite = ImageTk.PhotoImage(image=self.Sprite, master=self._ctxGfx.can)
-            if self.isVisible:               
-                self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
-                                                      image=self.tkSprite, tag='sprite')
-            else:
-                self._img = self._ctxGfx.can.create_image(self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry, anchor=Tk.NW,
-                                                      image=self.tkSprite, tag='sprite', state=Tk.HIDDEN)
-                            
-        else:
-            if self.isVisible:
-                self._ctxGfx.can.itemconfig(self._img, state=Tk.NORMAL) 
-            else:
-                self._ctxGfx.can.itemconfig(self._img, state=Tk.HIDDEN) 
-            
-            self._ctxGfx.can.coords(self._img, self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry)
-            self._ctxGfx.can.tag_raise(self._img) 
-            
+        if self.isVisible:
+            self._ctxGfx.fenetre.blit(self.Sprite, (self.x*self._ctxGfx.ry, self.y*self._ctxGfx.ry))
 
         self._hasChanged = False
 
@@ -166,9 +147,9 @@ class GfxMonster(Monster):
     def kill(self):
         
         #print("GfxMonster::kill:tagList:",self._ctxGfx.can.find_all())
-        if self._img is not None:
-            self._ctxGfx.can.delete(self._img)
-            self._img = None
+        # if self._img is not None:
+        #     self._ctxGfx.can.delete(self._img)
+        #     self._img = None
         
         #self._ctxGfx.can.delete(self.Sprite)
         #self.Sprite = None
@@ -228,14 +209,14 @@ class GfxRender():
         self._ctxGfx.ny = self._Map.LY
         
         # force la réinitialisation du plateau
-        self._ctxGfx.can.delete(self.tkPlateau) 
-        self._ctxGfx.can.delete(self.tkPlateauId) 
+       # self._ctxGfx.can.delete(self.tkPlateau) 
+       # self._ctxGfx.can.delete(self.tkPlateauId) 
         self.tkPlateau   = None
         self.tkPlateauId = None 
         self.plateau = None
         self.mapFx = None
         
-        self._ctxGfx.fenetre.update_idletasks()
+        #self._ctxGfx.fenetre.update_idletasks()
         
         # Initialisation des ressources grafiques
         self._initGfx()        
@@ -244,7 +225,7 @@ class GfxRender():
         self._lastTime  = time.time()
         
         # Association de la call back Graphique
-        self._ctxGfx.fenetre.after(1000, self.onUpdate)
+        #self._ctxGfx.fenetre.after(1000, self.onUpdate)
 
     def _initGfx(self):
         """
@@ -252,7 +233,7 @@ class GfxRender():
         """
         
         if self.photo_error is None:
-            self.photo_error = Image.open("sprite/Std/ErrorTile.png")
+            self.photo_error = pygame.image.load("sprite/Std/ErrorTile.png")
                     
         
         if (self.lastTheme is None) or (self.lastTheme !=  self._Map.Theme):
@@ -263,30 +244,33 @@ class GfxRender():
             self.photo_shadow_list.clear()
             
             # lecture du fond
-            self.photo_back  = Image.open("sprite/"+self._Map.Theme +"/background.png")
+            self.photo_back  = pygame.image.load("sprite/"+self._Map.Theme +"/background.png")
                     
             # Extraction des images mur
-            photo_set = Image.open("sprite/"+self._Map.Theme +"/walls.png")
+            self.wall_set = pygame.image.load("sprite/"+self._Map.Theme +"/walls.png").convert_alpha()
             for i in range(0,16) :
-                img = photo_set.crop((i*self._ctxGfx.rx, 0, (i+1)*self._ctxGfx.rx, self._ctxGfx.ry))
-                img.load()
+                rect = pygame.Rect(i*self._ctxGfx.rx,0,32,32)
+                img = self.wall_set.subsurface(rect)
+                #img.load()
                 self.photo_wall_list.append(img)
                 
                 
             # Extraction des objets
-            photo_set = Image.open("sprite/"+self._Map.Theme +"/assets.png")
-            (w,h) = photo_set.size
+            self.assets_set = pygame.image.load("sprite/"+self._Map.Theme +"/assets.png").convert_alpha()
+            (w,h) = self.assets_set.get_size()
             for i in range(0,w // self._ctxGfx.rx) :
-                img = photo_set.crop((i*self._ctxGfx.rx, 0, (i+1)*self._ctxGfx.rx, self._ctxGfx.ry))
-                img.load()
+                rect = pygame.Rect(i*self._ctxGfx.rx,0,32,32)
+                img = self.assets_set.subsurface(rect)
+                #img.load()
                 self.photo_asset_list.append(img)     
                 
             # Extraction des ombres        
-            photo_set = Image.open("sprite/"+self._Map.Theme +"/shadows.png")
-            (w,h) = photo_set.size
+            self.shadows_set = pygame.image.load("sprite/"+self._Map.Theme +"/shadows.png").convert_alpha()
+            (w,h) = self.shadows_set.get_size()
             for i in range(0,w // self._ctxGfx.rx) :
-                img = photo_set.crop((i*self._ctxGfx.rx, 0, (i+1)*self._ctxGfx.rx, self._ctxGfx.ry))
-                img.load()
+                rect = pygame.Rect(i*self._ctxGfx.rx,0,32,32)
+                img = self.shadows_set.subsurface(rect)
+                #img.load()
                 self.photo_shadow_list.append(img)    
                 
             self.lastTheme = self._Map.Theme
@@ -294,10 +278,13 @@ class GfxRender():
 
     def mainLoop(self):
         
-        # Association de la call back Graphique
-        self._ctxGfx.fenetre.after(1000, self.onUpdate)
         
-        self._ctxGfx.fenetre.mainloop()
+        self.onUpdate();
+        pass
+        # Association de la call back Graphique
+        #self._ctxGfx.fenetre.after(1000, self.onUpdate)
+        
+        #self._ctxGfx.fenetre.mainloop()
 
 
     def AddUser(self, playerName, pv=100, spriteFile='sprite/Hero/hero.png'):
@@ -368,9 +355,12 @@ class GfxRender():
         self._ctxGfx.showMessage('Bienvenu dans')
         
 
-        self.plateau = Image.new('RGBA',(self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), (255,255,255,255))
+        self.plateau =  pygame.Surface((self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry)).convert_alpha()
         
-        (bw,bh) = self.photo_back.size
+        
+        #Image.new('RGBA',(self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), (255,255,255,255))
+        
+        (bw,bh) = self.photo_back.get_size()
 
         (nbx, r) = divmod(self._ctxGfx.nx * self._ctxGfx.rx, bw)
         if r > 0: nbx += 1
@@ -380,7 +370,7 @@ class GfxRender():
         
         for y in range(0,nby):
             for x in range(0,nbx):
-                self.plateau.paste(self.photo_back,(x*bw, y*bh))                
+                self.plateau.blit(self.photo_back,(x*bw, y*bh))                
 
 
         # Génération des murs
@@ -396,7 +386,7 @@ class GfxRender():
                 
                 #print("render::code (lx,ly) = (",lx, ",", ly, ")", code)
                 if code != 0:
-                    self.plateau.paste(self.photo_wall_list[code],(lx*self._ctxGfx.ry, ly*self._ctxGfx.ry))                
+                    self.plateau.blit(self.photo_wall_list[code],(lx*self._ctxGfx.ry, ly*self._ctxGfx.ry))                
                             
 
     def renderFx(self, dt):
@@ -407,11 +397,15 @@ class GfxRender():
         res = False
         
         if self.mapFx is None:
-            self.mapFx = Image.new('RGBA',(self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), (0,0,255,0))
+            self.mapFx = pygame.Surface((self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), flags=SRCALPHA)
+            print("renderFx::mapFx Created !")
         
         for k in self._Map.FXList:
-            res = res or self._Map.FXList[k].renderFx(self, dt)
+            res = self._Map.FXList[k].renderFx(self, dt) or res
+            #print("renderFx::mapFx for>> res=",res)
             
+            
+        #print("renderFx::mapFx res=",res)
         return res
             
     def addFxTile(self,x,y,tileId):
@@ -421,9 +415,9 @@ class GfxRender():
         """
         
         if tileId > len(self.photo_asset_list)-1:
-            self.mapFx.paste(self.photo_error,(x*self._ctxGfx.ry, y*self._ctxGfx.ry))   
+            self.mapFx.blit(self.photo_error,(x*self._ctxGfx.ry, y*self._ctxGfx.ry))   
         else:
-            self.mapFx.paste(self.photo_asset_list[tileId],(x*self._ctxGfx.ry, y*self._ctxGfx.ry))   
+            self.mapFx.blit(self.photo_asset_list[tileId],(x*self._ctxGfx.ry, y*self._ctxGfx.ry))   
                 
         return None
 
@@ -437,9 +431,10 @@ class GfxRender():
                 code = code & 0x0F
                 if code != 0x0F:
                     #self.mapShadow.paste(self.photo_shadow_list[code],(x*self._ctxGfx.ry, y*self._ctxGfx.ry))
-                    self.mapFinal.paste(self.photo_shadow_list[code],
-                                        (x*self._ctxGfx.ry, y*self._ctxGfx.ry),
-                                        self.photo_shadow_list[code])
+                    self.mapFinal.blit(self.photo_shadow_list[code],
+                                        (x*self._ctxGfx.ry, y*self._ctxGfx.ry))
+                                        
+                                        #self.photo_shadow_list[code])
                     
                     # self.photo_shadow_list[code])
                 
@@ -450,38 +445,23 @@ class GfxRender():
         Fonction qui assure le mix des map pour générer l'image final
         """
         
-        #self.mapFinal = Image.new('RGBA',(self._ctxGfx.nx * self._ctxGfx.rx, self._ctxGfx.ny * self._ctxGfx.ry), (0,0,0,255))
-        
         # Vérifie si le plateau de base a été généré
         if self.plateau is None: 
             self.renderMap()
         
         # calcule la couche dynamique (basé sur l'état des effets)
         if self.renderFx(dt):
-            self.mapLastFx = Image.alpha_composite(self.plateau,self.mapFx)        
+            self.mapLastFx = self.plateau.copy()
+            self.mapLastFx.convert_alpha()
+            self.mapLastFx.blit(self.mapFx, (0,0))   
         
-        self.mapFinal = self.mapLastFx.copy()
-        
-        #self.renderFx(dt)
-        #self.mapFinal = Image.alpha_composite(self.plateau,self.mapFx)
-        
+        self.mapFinal = self.mapLastFx.copy()        
         
         # Calcul l'éclairage
         if self._Map.IsShadowEnabled == True:            
-            self.renderShadow()            
-                      
-                      
-        self._ctxGfx.can.delete(self.tkPlateau) 
-        self.tkPlateau = ImageTk.PhotoImage(image=self.mapFinal,  master=self._ctxGfx.can)
-
-        if self.tkPlateauId is not None:
-            self._ctxGfx.can.itemconfig(self.tkPlateauId , image=self.tkPlateau)
-        else:
-            self.tkPlateauId = self._ctxGfx.can.create_image(0, 0, anchor=Tk.NW, image=self.tkPlateau, state= Tk.NORMAL)
-        
-        #self._ctxGfx.can.delete(self.tkPlateauId)         
-        self._ctxGfx.can.tag_lower(self.tkPlateauId) 
-                
+            self.renderShadow()   
+              
+        self._ctxGfx.fenetre.blit(self.mapFinal, (0,0))
 
         # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         # %% Affichage des Persos      %%
@@ -494,6 +474,7 @@ class GfxRender():
         # Pour chaque monstre
         for p in self._EntityList.ActiveMonsterList:
             p.render(dt)
+        
         
 
     def onUpdate(self):
@@ -508,7 +489,7 @@ class GfxRender():
         dt = cur - self._lastTime
 
         # Purge les mise à jour du canvas
-        self._ctxGfx.can.update()
+        #self._ctxGfx.can.update()
 
         # Mise à jour de l'interface
         self._ctxGfx.doUpdate(dt, self._Map)
@@ -527,13 +508,16 @@ class GfxRender():
         self.render(dt)
 
 
+        #self._ctxGfx.fenetre.blit(self._ctxGfx.can,(0,0))
+
         # Mise à jour de la référence temporelle
         self._lastTime  = cur
 
         # Si la map n'est pas finit on continue, sinon on arrête
         if not self._Map.isFinished :    
             # Association de la call back Graphique
-            self._ctxGfx.fenetre.after(50, self.onUpdate)
+            #self._ctxGfx.fenetre.after(50, self.onUpdate)
+            pass
         else:
             try:
                 self.OnMapEnd()

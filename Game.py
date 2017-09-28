@@ -11,6 +11,8 @@ __author__ = 'Yoann'
 
 """
     Programme principal
+    
+    Version PyGame
 """
 
 
@@ -32,12 +34,13 @@ class GameSession():
         self.mapList = []
         
         # Création du context Graphique
-        self._ctxGfx = GfxCtx.CtxGfx("Labyrinthe d'Info@Leze V0.80a")
+        self._ctxGfx = GfxCtx.CtxGfx("Labyrinthe d'Info@Leze V0.90")
         self._ctxGfx.onNext = self._onNextMap
         self._ctxGfx.onReload = self._onReload
         
         # Affichage de l'interface
         self._ctxGfx.construitInterface()
+        self._ctxGfx.startScreen()
         
         # Création de l'objet labyrinthe        
         self._labyObject = Laby.LabyText()
@@ -118,7 +121,8 @@ class GameSession():
     def mainLoop(self):
         
         # Lancement de la boucle principal (boucle graphique)
-        self._gfxRender.mainLoop()
+                
+        self._ctxGfx.mainLoop(self._gfxRender)
         
         
     def _onMapEnd(self):

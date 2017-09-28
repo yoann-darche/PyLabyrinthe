@@ -1,11 +1,18 @@
 
 # -*- coding: utf-8 -*-
-import tkinter as Tk
-from tkinter.messagebox import askyesno
-import tkinter.ttk as ttk
-from PIL import Image, ImageDraw, ImageTk, ImageEnhance
-import time
+#import tkinter as Tk
+#from tkinter.messagebox import askyesno
+#import tkinter.ttk as ttk
+#from PIL import Image, ImageDraw, ImageTk, ImageEnhance
 
+# Std import
+import sys, time
+
+# Specific import
+import pygame
+from pygame.locals import *
+
+FPS = 60
 
 # *****************************************************************************
 # ** Classe du context Graphique, cette classe assure la création de la      **
@@ -17,6 +24,9 @@ class CtxGfx():
 
     def __init__(self, title='Le labyrinthe oufff & Connceté! - V0.x'):
 
+        # taille de la fenête
+        self.WIDTH = 1200
+        self.HEIGHT = 800
 
         # taille des cases du labyrinthe x/y en pixel
         self.rx = 32
@@ -44,55 +54,76 @@ class CtxGfx():
         self.TitleMsg = None  
         self.SessionTime = 0      
 
-        self.fenetre = Tk.Tk()
-        self.fenetre.config(bg="black")
-        self.fenetre.title(title)
-        
-        # Mise au premier plan
-        #self.fenetre.attributes('-fullscreen',1)
-        #self.fenetre.overrideredirect(1)
 
+        # initialisation de pyGame
+        pygame.init()
+        
+
+        self.FPSCLOCK = pygame.time.Clock()
+        
+        self.fenetre = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
+        pygame.display.set_caption(title)
+        
+        #self.fenetre = self._fenetre.convert_alpha()
+        self.fenetre.fill((0,128,0))
         
         # capture de l'evt de la fenetre
-        self.fenetre.protocol("WM_DELETE_WINDOW", self.quitter)
-        self.fenetre.bind("<Escape>",self.quitterHard)
-        self.fenetre.bind("<Control-KeyPress-N>",self.doNext)
-        self.fenetre.bind("<Control-KeyPress-R>",self.doReload)
+        #Þself.fenetre.protocol("WM_DELETE_WINDOW", self.quitter)
+        #self.fenetre.bind("<Escape>",self.quitterHard)
+        #self.fenetre.bind("<Control-KeyPress-N>",self.doNext)
+        #self.fenetre.bind("<Control-KeyPress-R>",self.doReload)
         
         # Tableau des monstres
-        self.tkMonsterBoard = None
-        self.tkMonsterBoardId = None
+        #self.tkMonsterBoard = None
+        #self.tkMonsterBoardId = None
+
+
+    def quitMain(self):
+        """
+            Fonction qui assure l'arrêt de la boucle principal du jeux
+        """
+        pygame.quit()
+        sys.exit()
 
     def construitInterface(self):
         """
         Cette fonction se charge de la construction de l'interface
         :return:
         """
-        # w = self.nx*self.rx
-        w = 1200
+
         h = self.ny*self.ry
         
         # Création de la barre des infos
-        self.cInfo = Tk.Canvas(self.fenetre, width=w, height=80, bd=0, bg='black', relief="flat")        
-        self.cInfo.pack()
+        self.cInfo = pygame.Surface((self.WIDTH,80))
+        #self.cInfo = Tk.Canvas(self.fenetre, width=w, height=80, bd=0, bg='black', relief="flat")        
+        #self.cInfo.pack()
         
         # Création du context graphique pour l'affichage du labyrinthe
-        self.can = Tk.Canvas(self.fenetre, width=w, height=h, bd=0, bg='black')        
-        self.can.pack()
+        self.can = pygame.Surface((self.WIDTH,self.HEIGHT))
+        
+        #self.can = Tk.Canvas(self.fenetre, width=w, height=h, bd=0, bg='black')        
+        #self.can.pack()
 
         
         
-        x = (w - 240) // 2
+        x = (self.WIDTH - 240) // 2
         # Création de la liste des monstres
-        self.monster_cadre = self.cInfo.create_rectangle(w - 2*x, 0, w-240, 40, fill='#4F0000', width=1, outline='#FFFFFF')
+        self.monster_cadre = pygame.draw.rect(self.cInfo,(79, 0, 0), [self.WIDTH - 2*x, 41, self.WIDTH-240, 80])
+       
         
         # Création de la boite de message
-        self.msg_cadre = self.cInfo.create_rectangle(w - 2*x, 41, w-240, 80, fill='#00007F', width=1, outline='#FFFFFF')
+        self.msg_cadre = pygame.draw.rect(self.cInfo,(79, 0, 0), [self.WIDTH - 2*x, 41, self.WIDTH-240, 80])
         
-        self.cInfoMsg = self.cInfo.create_text(w // 2, 60, width=w-240, fill='white', 
-                             text=self._defaultMsg, justify=Tk.LEFT, font=('Courrier', 20,))
+        
+        self.fontInfo = pygame.font.Font('freesansbold.ttf', 20)
+        self.cInfoMsg = self.fontInfo.render(self._defaultMsg, True, (255,255,255), (0,0,0))
+        self.fontTime = pygame.font.Font('freesansbold.ttf', 30)
+        self.cTimeMsg = self.fontTime.render('0000.0', True, (0,255,255))
+        
+       # self.cInfoMsg = self.cInfo.create_text(w // 2, 60, width=w-240, fill='white', 
+       #                      text=self._defaultMsg, justify=Tk.LEFT, font=('Courrier', 20,))
                              
-        self.cTimeMsg =  self.cInfo.create_text(w-70,40, width=240, fill='#00FFFF', text='0000.0', justify=Tk.RIGHT, font=('Courrier',30))
+       # self.cTimeMsg =  self.cInfo.create_text(w-70,40, width=240, fill='#00FFFF', text='0000.0', justify=Tk.RIGHT, font=('Courrier',30))
       
 
         
@@ -102,9 +133,33 @@ class CtxGfx():
         """
         self.nx = nx
         self.ny = ny
-        self.can.config(width=self.nx*self.rx, height=self.ny*self.ry)    
+        
+        self.margeX = (self.WIDTH - self.nx*self.rx) // 2
+        if self.margeX < 0: self.margeX = 0
+        
+        self.margeY = (self.HEIGHT - self.ny*self.ry) // 2
+        if self.margeY < 0: self.margeY = 0
+        
+        self.canRect = pygame.Rect(self.margeX, self.margeY, self.nx*self.rx, self.ny*self.ry)
+
+        
         self.SessionTime = time.time()
        
+       
+    def mainLoop(self,gfxRender):
+        
+        while True:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                    
+            gfxRender.onUpdate()
+    
+            pygame.display.update()
+            self.FPSCLOCK.tick(FPS)
+        
+        
        
     def quitter(self, event=None):
         """
@@ -153,7 +208,7 @@ class CtxGfx():
         """                
         
         # Affiche le cadre des message        
-        self.cInfo.itemconfig(self.cInfoMsg, text=message)     
+       # self.cInfo.itemconfig(self.cInfoMsg, text=message)     
         print("MSG: ",message)   
         self.msgTimeToLive = time
         
@@ -166,7 +221,7 @@ class CtxGfx():
         """
         
         # Affiche le cadre des message        
-        self.cInfo.itemconfig(self.cInfoMsg, text=self._defaultMsg)
+        # self.cInfo.itemconfig(self.cInfoMsg, text=self._defaultMsg)
         self.msgTimeToLive = -1
     
     def doUpdate(self,dt, LabyObj):
@@ -198,7 +253,7 @@ class CtxGfx():
         # Affichage du Temps
         u = "{0:0>4.1f}".format(time.time()-self.SessionTime)
         #print(">", u)
-        self.cInfo.itemconfig(self.cTimeMsg, text=u) 
+        #self.cInfo.itemconfig(self.cTimeMsg, text=u) 
                 
                 
     # **************************************************************************
@@ -209,6 +264,8 @@ class CtxGfx():
         """
         Fonction assurant l'affichage de l'état des monstres
         """
+        
+        return None
         
         # Si pas de changement exit direct
         if not(MonsterList.hasUpdate): return None
@@ -273,6 +330,44 @@ class CtxGfx():
         self.can.delete(self.TitleMsg)
         self.TitleRect =  None
         self.TitleMsg = None
+        
+        
+        
+    # #########################################################################
+    # #                      Ecran d'acceuil                                 ##
+    # #########################################################################
+    
+    def startScreen(self):
+        
+        imgBackground = pygame.image.load('./res/startScreen/background.png')
+        rectBackground = imgBackground.get_rect()
+        
+        rectBackground.centery = self.HEIGHT // 2
+        rectBackground.centerx = self.WIDTH // 2
+        
+        
+        self.fenetre.fill(0)
+        
+        self.fenetre.blit(imgBackground, rectBackground)
+        
+        # Boucle principal pour l'écran d'acceuil.
+        while True: 
+            for event in pygame.event.get():
+                                
+                
+                if event.type == QUIT:
+                    self.quitMain()
+                elif event.type == KEYDOWN:
+                    # une touche a été appuyée
+                    if event.key == K_ESCAPE:
+                        self.quitMain()
+                    return 
+
+            # Affiche l'écran
+            pygame.display.update()
+            self.FPSCLOCK.tick()
+        
+        
         
         
         

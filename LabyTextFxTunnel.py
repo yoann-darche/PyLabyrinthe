@@ -16,7 +16,9 @@ __author__ = 'Yoann'
 class LTFxTunnel(LabyTextFx.LabyTextFx):
     
 
-    def initFx(self, ObjLabyTxt, code):        
+    def initFx(self, ObjLabyTxt, code):   
+    
+        self.k = True
         
         LabyTextFx.LabyTextFx.initFx(self,ObjLabyTxt, code)
         
@@ -64,12 +66,21 @@ class LTFxTunnel(LabyTextFx.LabyTextFx):
     def renderFx(self, ObjGfx, dt):
         
         if self._hasChanged:
-            for (x,y) in self.ExchangeSet:
-                ObjGfx.addFxTile(x,y,SpriteIndex.SPRITE_TELEPORTEUR)
-            self._hasChanged = False
-        
-            return True 
+            #if self.k:
+                for (x,y) in self.ExchangeSet:
+                    ObjGfx.addFxTile(x,y,SpriteIndex.SPRITE_TELEPORTEUR)
+            #else:
+            #    for (x,y) in self.ExchangeSet:
+            #        ObjGfx.addFxTile(x,y,SpriteIndex.SPRITE_TRESOR)
+                    
+                self._hasChanged = False
+            #print("LTFXTunnel::applyFX::rendered")
+            #self.k = not(self.k)
+            #print(self.k)
             
+        
+                return True 
+        
         return False        
         
         
