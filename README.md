@@ -16,8 +16,9 @@ GitHub : https://github.com/pygame/
 
 ## Description
 * To lunch the game run : game.py
-* To customize the Labyrinthe, edit the CustomLaby.py
-* To customize the effect list, edit the LabyText.py
+* You can add a new map by creatin a JSON file under ./maps (template.json can be starting point) (see Wiki)
+* To add new tile, or graphics element go to ./sprite
+* To udpate the map list update the game.py (GameSession.loadMapList())
 * To customize the Monster move strategy, edit the MonsterEngine.py
 
 # State
