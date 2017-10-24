@@ -5,18 +5,14 @@ A 2D Graphical Labyrinthe Game.
 	<img src="./doc/screenshoot/PyLabyrintheV060.png"/>
 </p>
 
-Use the Pillow Libarie and run in Python 3.X
+Use the PyGame Libary and run in Python 3.X
 
 ## Dependecies
 
-### Pillow 4.1.0
-Linux Installation:
-* apt-get install python3-dev python3-setuptools
-* apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk
-* pip3 install --upgrade Pillow
+### PyGame 1.9.3+
 
-WebSite of Pillow : https://python-pillow.org/
-GitHub : https://github.com/python-pillow/Pillow
+WebSite of PyGame : http://www.pygame.org/news
+GitHub : https://github.com/pygame/
 
 ## Description
 * To lunch the game run : game.py
