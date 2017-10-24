@@ -66,24 +66,27 @@ class CtxGfx():
         
         #self.fenetre = self._fenetre.convert_alpha()
         self.fenetre.fill((0,128,0))
-        
-        # capture de l'evt de la fenetre
-        #Þself.fenetre.protocol("WM_DELETE_WINDOW", self.quitter)
-        #self.fenetre.bind("<Escape>",self.quitterHard)
-        #self.fenetre.bind("<Control-KeyPress-N>",self.doNext)
-        #self.fenetre.bind("<Control-KeyPress-R>",self.doReload)
-        
+                
         # Tableau des monstres
         #self.tkMonsterBoard = None
         #self.tkMonsterBoardId = None
 
 
-    def quitMain(self):
+    def quitter(self, event=None):
         """
-            Fonction qui assure l'arrêt de la boucle principal du jeux
+        Fonction appelé pour finir le programme, une confirmation est demandée avant.
+        (AFR)
         """
+        
+        #reponse = askyesno("Quitter le programme ?",
+        #"Voulez-vous réellement terminer ? \n cliquer <<oui>> pour finir")
+        
+        #if reponse:
+        #    self.fenetre.destroy()
+        
         pygame.quit()
         sys.exit()
+        
 
     def construitInterface(self):
         """
@@ -145,52 +148,58 @@ class CtxGfx():
         
         self.SessionTime = time.time()
        
+
+    # #########################################################################
+    # #                      Boucle principale                               ##
+    # #########################################################################
        
     def mainLoop(self,gfxRender):
         
+        """
+        Boucle principale graphique
+        """
+        
         while True:
+            
+            # Gestion des évènement
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
+                
+                # Gestion des touches relachées (commandes)
+                if event.type == KEYUP:
+                    if event.key == K_ESCAPE:
+                        self.quitter()
+                    elif event.key == K_n:
+                        self.doNext(event)
+                    elif event.key == K_r:
+                        self.doReload(event)
+                     
+                # Gestion des touches enfoncées (evt clavier)
+                if event.type == KEYDOWN:
+                    self._mgrKeyDown(event)
                     
+            # Appel de la mise à jour du graphisme Labyrinthe
             gfxRender.onUpdate()
     
+            # Appel de la boucle graphique de pyGame
             pygame.display.update()
             self.FPSCLOCK.tick(FPS)
+
+
+
+    # **************************************************************************
+    # ** Fonctions de gestion des evénèments claviers                         **
+    # **************************************************************************
+    
+    def _mgrKeyDown(self,envent):
         
+        pass
         
-       
-    def quitter(self, event=None):
-        """
-        Fonction appelé pour finir le programme, une confirmation est demandée avant
-        """
-        
-        reponse = askyesno("Quitter le programme ?",
-        "Voulez-vous réellement terminer ? \n cliquer <<oui>> pour finir")
-        
-        if reponse:
-            self.fenetre.destroy()
-            
-    def quitterHard(self, event=None):
-        """
-        Fonction appelé pour finir le programme Direct
-        """
-        self.fenetre.destroy()
-            
-    def doNext(self, event):
-        
-        try:
-            self.onNext()
-        except:
-            pass
-            
-    def doReload(self, event):
-        
-        try:
-            self.onReload()
-        except:
-            pass
+    
+
+
 
 
     # **************************************************************************
@@ -356,18 +365,38 @@ class CtxGfx():
                                 
                 
                 if event.type == QUIT:
-                    self.quitMain()
+                    self.quitter()
                 elif event.type == KEYDOWN:
                     # une touche a été appuyée
                     if event.key == K_ESCAPE:
-                        self.quitMain()
+                        self.quitter()
                     return 
+                elif event.type == MOUSEBUTTONDOWN :
+                    return
+                    
 
             # Affiche l'écran
             pygame.display.update()
             self.FPSCLOCK.tick()
         
         
+    # **************************************************************************
+    # ** Callnacks diverses
+    # **************************************************************************
+    
+    def doNext(self, event):
+        
+        try:
+            self.onNext()
+        except:
+            pass
+            
+    def doReload(self, event):
+        
+        try:
+            self.onReload()
+        except:
+            pass
         
         
         
